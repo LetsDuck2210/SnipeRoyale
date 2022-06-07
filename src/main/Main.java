@@ -5,13 +5,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -28,6 +28,7 @@ import org.jsoup.select.Elements;
 
 import util.AutoResize;
 import util.Clan;
+import util.ImageUtil;
 import util.Player;
 
 public class Main {
@@ -146,7 +147,7 @@ public class Main {
 		clanName.setFont(new Font("sans-serif", Font.BOLD, 20));
 		
 		var playerContainer = new JLabel();
-		playerContainer.setPreferredSize(new Dimension(root.getWidth(), 80 * clan.getPlayers().length + clanName.getHeight() + 28));
+		playerContainer.setPreferredSize(new Dimension(root.getWidth(), 80 * clan.getPlayers().length + clanName.getHeight() + 28 * 2));
 		
 		playerContainer.add(clanName);
 		var playerScrollPane = new JScrollPane(playerContainer);
@@ -155,10 +156,46 @@ public class Main {
 		playerScrollPane.setSize(root.getSize());
 		for(int j = 0; j < clan.getPlayers().length; j++) {
 			Player p = clan.getPlayers()[j];
-			playerContainer.add(getPlayerLabel(p, j + 1, () -> {}));
+			playerContainer.add(getPlayerLabel(p, j + 1, () -> showPlayer(p)));
 		}
 		root.add(playerScrollPane);
 		playerScrollPane.revalidate();
+	}
+	public static void showPlayer(Player player) {
+		root.removeAll();
+		root.repaint();
+		
+		System.out.println("loading deck " + player + "...");
+		
+		try {
+			var doc = Jsoup.connect("https://royaleapi.com/player/" + player.getTag()).get();
+			var cards = doc.select("img.deck_card");
+			for(int i = 0; i < 2; i++) {
+				for(int j = 0; j < 4; j++) {
+					var card = cards.get(j + (i * 4)).toString();
+					
+					var urlPrefix = "src=\""; // src="
+					var urlStart = card.indexOf(urlPrefix) + urlPrefix.length();
+					var urlEnd = card.indexOf('"', urlStart);
+					
+					String imgURL = card.substring(urlStart, urlEnd);
+					Image img = ImageUtil.resize(
+						ImageIO.read(new URL(imgURL)),
+						500 / 4,
+						-1
+					);
+					JLabel cardLabel = new JLabel();
+					cardLabel.setIcon(new ImageIcon(img));
+					cardLabel.setSize(img.getWidth(null), img.getHeight(null));
+					cardLabel.setLocation(j * cardLabel.getWidth(), i * cardLabel.getHeight());
+					root.add(cardLabel);
+					root.repaint();
+				}
+			}
+		} catch(IOException e) {
+			debug("Couldn't load deck: " + e.getMessage(), Color.RED);
+			e.printStackTrace();
+		}
 	}
 	
 	public static void debug(String message, Color color) {
@@ -166,7 +203,7 @@ public class Main {
 		debugLabel.setText(message);
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
 			showFrame();
 		});
@@ -198,8 +235,8 @@ public class Main {
 	}
 	
 	
-	public static JLabel getClanLabel(Clan clan, int i, Runnable onClick) {
-		final var clanLabel = new JLabel() {
+	public static JButton getClanLabel(Clan clan, int i, Runnable onClick) {
+		final var clanLabel = new JButton() {
 			private static final long serialVersionUID = 8499764229216881906L;
 			
 			@Override
@@ -213,42 +250,21 @@ public class Main {
 					getHeight() / 2 + 8
 				);
 				
-				var badge = resize(clan.getBadge(), -1, getHeight());
+				var badge = ImageUtil.resize(clan.getBadge(), -1, getHeight());
 				g.drawImage(badge, getWidth() - badge.getWidth(null), 0, null);
 			}
-			
-			public static Image resize(Image img, int width, int height) {
-				var scaledImg = img.getScaledInstance(width, height, Image.SCALE_FAST);
-				BufferedImage bufferedImage= new BufferedImage(scaledImg.getWidth(null), scaledImg.getHeight(null), BufferedImage.TYPE_INT_RGB);
-				var g = bufferedImage.getGraphics();
-				g.setColor(Color.WHITE);
-				g.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
-				g.drawImage(img, 0, 0, scaledImg.getWidth(null), scaledImg.getHeight(null), null);
-				
-				return bufferedImage;
-			}
-
 		};
 		clanLabel.setSize(500, 100);
 		clanLabel.setLocation(50, i * clanLabel.getHeight());
 		clanLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		clanLabel.setVisible(true);
 		
-		clanLabel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				final int x = e.getX(),
-						  y = e.getY();
-				if(x > clanLabel.getX() && x < clanLabel.getX() + clanLabel.getWidth()
-						&& y > clanLabel.getY() && y < clanLabel.getY() + clanLabel.getHeight() + 16)
-					onClick.run();
-			}
-		});
+		clanLabel.addActionListener(a -> onClick.run());
 		
 		return clanLabel;
 	}
-	public static JLabel getPlayerLabel(Player p, int i, Runnable onClick) {
-		var label = new JLabel() {
+	public static JButton getPlayerLabel(Player p, int i, Runnable onClick) {
+		var label = new JButton() {
 			private static final long serialVersionUID = 8499764229216881906L;
 			
 			@Override
@@ -261,14 +277,25 @@ public class Main {
 					getHeight() / 2 - getFont().getSize() / 2,
 					getHeight() / 2 + 8
 				);
+				String trophyStr = "-1";
+				try {
+					trophyStr = "" + p.getTrophies();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				g.drawString(
+					trophyStr,
+					getWidth() - getFont().getSize() * trophyStr.length() - 10,
+					getHeight() / 2 + 8
+				);
 			}
-
 		};
 		label.setSize(500, 80);
 		label.setLocation(50, i * label.getHeight());
 		label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		label.setVisible(true);
 		
+		label.addActionListener(a -> onClick.run());
 		
 		return label;
 	}
