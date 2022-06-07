@@ -84,4 +84,8 @@ public class Clan {
 		
 		return clan.substring(tagStart, tagEnd);
 	}
+	
+	public String toString() {
+		return "Clan@" + name + "(" + tag + ")";
+	}
 }
