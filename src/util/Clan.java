@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.imageio.ImageIO;
 
@@ -46,6 +47,18 @@ public class Clan {
 	public Player[] getPlayers() {
 		return players.toArray(new Player[0]);
 	}
+	public void onlyPlayersByName(String name, boolean matchExact) {
+		players.removeIf(new Predicate<Player>() {
+
+			@Override
+			public boolean test(Player p) {
+				if(matchExact)
+					return !p.getName().equals(name);
+				else
+					return !p.getName().toLowerCase().contains(name.toLowerCase());
+			}
+		});
+	}
 	
 	public static List<Player> getClanPlayers(String tag) throws IOException {
 		var doc = Jsoup.connect("https://royaleapi.com/clan/" + tag).get();
@@ -53,8 +66,8 @@ public class Clan {
 		
 		var playerElements = doc.select("a.member_link");
 		for(int i = 0; i < playerElements.size(); i++) {
-			var playerElement = playerElements.get(i);
-			players.add(new Player(playerElement.toString()));
+			var player = new Player(playerElements.get(i).toString());
+			players.add(player);
 		}
 		
 		return players;

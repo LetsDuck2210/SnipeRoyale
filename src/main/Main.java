@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -33,6 +34,8 @@ public class Main {
 	private static JFrame frame;
 	private static JPanel root;
 	private static JLabel debugLabel;
+	private static boolean matchExact;
+	private static String searchedPlayer;
 	
 	public static void showFrame() {
 		frame = new JFrame("SnipeRoyale");
@@ -45,6 +48,7 @@ public class Main {
 		
 		root = new JPanel();
 		root.setSize(frame.getSize());
+		root.setLayout(null);
 		frame.add(root);
 		
 		debugLabel = new JLabel("", 0);
@@ -76,7 +80,6 @@ public class Main {
 		root.add(playerInputLabel);
 		root.add(playerInput);
 		
-		
 		var exactSearch = new JCheckBox("exact match");
 		exactSearch.setSize((int) Math.round(inSize.width / 1.5), inSize.height);
 		exactSearch.setLocation(
@@ -93,10 +96,11 @@ public class Main {
 		);
 		searchButton.addActionListener(a -> {
 			try {
-				for(int i = 0; i < root.getComponentCount(); i++)
-					root.remove(root.getComponent(i));
+				root.removeAll();
+				matchExact = exactSearch.isSelected();
+				searchedPlayer = playerInput.getText();
 				
-				showClans(search(clanInput.getText(), playerInput.getText(), exactSearch.isSelected()));
+				showClans(search(clanInput.getText(), playerInput.getText(), matchExact));
 			} catch (IOException e) {
 				e.printStackTrace();
 				debug("Couldn't find clan: " + e.getMessage(), Color.RED);
@@ -109,46 +113,63 @@ public class Main {
 		frame.repaint();
 	}
 	public static void showClans(Clan[] clans) {
+		if(clans.length == 1) {
+			showPlayers(clans[0]);
+			return;
+		}
+		
+		root.removeAll();
+		
 		var container = new JLabel();
-		container.setSize(root.getWidth(), 100 * clans.length);
+		container.setPreferredSize(new Dimension(root.getWidth(), 100 * clans.length));
 		var scrollPane = new JScrollPane(container);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setSize(root.getSize());
+		
 		for(int i = 0; i < clans.length; i++) {
 			final var clan = clans[i];
 			
-			container.add(getClanLabel(clan, i, () -> {
-				for(int j = 0; j < root.getComponentCount(); j++)
-					root.remove(root.getComponent(j));
-				
-				var playerContainer = new JLabel();
-				playerContainer.setSize(root.getWidth(), 80 * clan.getPlayers().length);
-				var playerScrollPane = new JScrollPane(playerContainer);
-				playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-				playerScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-				
-				for(int j = 0; j < clan.getPlayers().length; j++) {
-					Player p = clan.getPlayers()[j];
-					playerContainer.add(getPlayerLabel(p, j, () -> {}));
-				}
-				root.add(playerScrollPane);
-				root.repaint();
-			}));
+			container.add(getClanLabel(clan, i, () -> showPlayers(clan)));
 		}
-		container.repaint();
 		
-		root.add(container);
-		root.repaint();
+		root.add(scrollPane);
+		scrollPane.revalidate();
 	}
+	public static void showPlayers(Clan clan) {
+		root.removeAll();
+		
+		clan.onlyPlayersByName(searchedPlayer, matchExact);
+		
+		var clanName = new JLabel(clan.getName() + "(" + clan.getTag() + ")", SwingConstants.CENTER);
+		clanName.setSize(root.getWidth(), 50);
+		clanName.setFont(new Font("sans-serif", Font.BOLD, 20));
+		
+		var playerContainer = new JLabel();
+		playerContainer.setPreferredSize(new Dimension(root.getWidth(), 80 * clan.getPlayers().length + clanName.getHeight() + 28));
+		
+		playerContainer.add(clanName);
+		var playerScrollPane = new JScrollPane(playerContainer);
+		playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		playerScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		playerScrollPane.setSize(root.getSize());
+		for(int j = 0; j < clan.getPlayers().length; j++) {
+			Player p = clan.getPlayers()[j];
+			playerContainer.add(getPlayerLabel(p, j + 1, () -> {}));
+		}
+		root.add(playerScrollPane);
+		playerScrollPane.revalidate();
+	}
+	
 	public static void debug(String message, Color color) {
 		debugLabel.setForeground(color);
 		debugLabel.setText(message);
 	}
 	
 	public static void main(String[] args) throws IOException {
-		
-		showFrame();
-		
+		SwingUtilities.invokeLater(() -> {
+			showFrame();
+		});
 	}
 	
 	public static Clan[] search(String clan, String player, boolean exactMatchOnly) throws IOException {
@@ -200,7 +221,7 @@ public class Main {
 				var scaledImg = img.getScaledInstance(width, height, Image.SCALE_FAST);
 				BufferedImage bufferedImage= new BufferedImage(scaledImg.getWidth(null), scaledImg.getHeight(null), BufferedImage.TYPE_INT_RGB);
 				var g = bufferedImage.getGraphics();
-				g.setColor(frame.getBackground());
+				g.setColor(Color.WHITE);
 				g.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
 				g.drawImage(img, 0, 0, scaledImg.getWidth(null), scaledImg.getHeight(null), null);
 				
@@ -243,6 +264,10 @@ public class Main {
 			}
 
 		};
+		label.setSize(500, 80);
+		label.setLocation(50, i * label.getHeight());
+		label.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		label.setVisible(true);
 		
 		
 		return label;
