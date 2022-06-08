@@ -5,9 +5,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
@@ -38,8 +39,12 @@ public class Main {
 	private static JLabel debugLabel;
 	private static boolean matchExact;
 	private static String searchedPlayer;
+	private static boolean stopThread;
+	private static List<Thread> threads;
 	
-	public static void showFrame() {
+	private static JButton homeButton;
+	
+	public static void setupFrame() {
 		frame = new JFrame("SnipeRoyale");
 		frame.setSize(600, 400);
 		frame.setLocationRelativeTo(null);
@@ -57,10 +62,33 @@ public class Main {
 		debugLabel.setSize(root.getWidth(), 50);
 		root.add(debugLabel);
 		
+		final var buttonSize = 32;
+		homeButton = new JButton();
+		try {
+			homeButton.setIcon(new ImageIcon(ImageUtil.resize(ImageUtil.load("assets/Home.png"), buttonSize, buttonSize)));
+		} catch (IOException e) {
+			debug("Couldn't read image(assets/Home.png): " + e.getMessage(), Color.RED);
+			e.printStackTrace();
+		}
+		homeButton.setSize(buttonSize, buttonSize);
+		homeButton.setLocation(4, root.getHeight() - buttonSize * 2);
+		homeButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		homeButton.addActionListener(a -> {
+			root.removeAll();
+			showFrame();
+			stopThread = true;
+		});
+		
+		threads = new ArrayList<>();
+	}
+	public static void showFrame() {
+		if(frame == null)
+			setupFrame();
+		
 		var titleImage = new JLabel();
 		titleImage.setSize(600, 140);
 		try {
-			titleImage.setIcon(new ImageIcon(ImageUtil.resize(ImageIO.read(new File("assets/SnipeRoyaleTitle.jpg")), 600, titleImage.getHeight())));
+			titleImage.setIcon(new ImageIcon(ImageUtil.resize(ImageUtil.load("assets/SnipeRoyaleTitle.jpg"), 600, titleImage.getHeight())));
 		} catch (IOException e) {
 			debug("Couldn't load title-image: " + e.getMessage(), Color.RED);
 			e.printStackTrace();
@@ -145,17 +173,19 @@ public class Main {
 		var playerScrollPane = new JScrollPane(playerContainer);
 		playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		playerScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		playerScrollPane.setSize(root.getSize());
+		playerScrollPane.setSize(root.getWidth(), root.getHeight() - homeButton.getHeight() * 2);
 		for(int j = 0; j < clan.getPlayers().length; j++) {
 			Player p = clan.getPlayers()[j];
 			playerContainer.add(getPlayerLabel(p, j + 1, () -> showPlayer(p)));
 		}
 		root.add(playerScrollPane);
+		root.add(homeButton);
 		playerScrollPane.revalidate();
 	}
 	public static void showPlayer(Player player) {
 		root.removeAll();
 		root.repaint();
+		stopThread = true;
 		
 		System.out.println("loading deck " + player + "...");
 		
@@ -197,6 +227,7 @@ public class Main {
 					cardLabel.setSize(img.getWidth(null), img.getHeight(null));
 					cardLabel.setLocation(j * cardLabel.getWidth(), i * cardLabel.getHeight());
 					root.add(cardLabel);
+					root.add(homeButton);
 					root.repaint();
 				}
 			}
@@ -224,9 +255,12 @@ public class Main {
 		});
 	}
 	
+	private static AtomicInteger foundClans;
 	public static void showAndSearchClans(String clan, String player, boolean exactMatchOnly) throws IOException {
+		stopThread = false;
 		var cs = sanitizeForURL(clan);
 		Document doc = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on").get();
+		foundClans = new AtomicInteger();
 		
 		root.removeAll();
 		
@@ -234,22 +268,62 @@ public class Main {
 		var scrollPane = new JScrollPane(container);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setSize(root.getSize());
+		scrollPane.setSize(root.getWidth(), root.getHeight() - 64);
 		
 		root.add(scrollPane);
+		root.add(homeButton);
+		root.repaint();	
 		scrollPane.revalidate();
-		Elements clanResults = doc.select("div.card");
+		
+		var clanResults = doc.select("div.card");
+		var amountResults = doc.select("div.ui.segment.attached.top").select("strong").get(0).html();
+		var num = Integer.parseInt(amountResults.substring("Found".length(), amountResults.length() - "clans".length()).trim());
 		System.out.println(clanResults.size() + " clans found...");
-		AtomicInteger count = new AtomicInteger(clanResults.size());
-		container.setPreferredSize(new Dimension(root.getWidth(), 100 * count.get()));
-		for(int i = 0; i < clanResults.size(); i++) {
-			final int j = i;
-			new Thread(() -> {
+		
+		evalSearch(clan, player, exactMatchOnly, clanResults, container);
+		scrollPane.revalidate();
+		
+		thread("showandsearch-root", () -> {
+			for(int i = 2; i <= Math.floor(num / 60); i++) {
+				if(stopThread) return;
+				final int j = i;
+				thread("showandsearch-" + i, () -> {
+					try {
+						var docP = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on&page=" + j).get();
+						var clanResultsP = docP.select("div.card");
+						evalSearch(clan, player, exactMatchOnly, clanResultsP, container);
+						scrollPane.revalidate();
+					} catch (IOException e) {
+						debug("Connect exception: " + e.getMessage(), Color.RED);
+						e.printStackTrace();
+					}
+				}).start();
 				try {
-					Clan clanRes = new Clan(clanResults.get(j).toString());
+					Thread.sleep(750 * i);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+	public static void evalSearch(String clan, String player, boolean exactMatchOnly, Elements clans, JLabel container) {
+		if(stopThread) return;
+		
+		container.setPreferredSize(new Dimension(root.getWidth(), 100 * clans.size()));
+		
+		for(int i = 0; i < clans.size(); i++) {
+			if(stopThread) return;
+			
+			final int j = i;
+			thread("evalsearch-" + i, () -> {
+				if(stopThread) return;
+				try {
+					Clan clanRes = new Clan(clans.get(j).toString());
 					boolean add = false;
 					
 					for(var playerRes : clanRes.getPlayers()) {
+						if(stopThread) return;
+						
 						if(exactMatchOnly) {
 							if(playerRes.getName().equals(player)) {
 								add = true;
@@ -261,15 +335,13 @@ public class Main {
 						}
 					}
 					if(add)
-						container.add(getClanLabel(clanRes, j, () -> showPlayers(clanRes)));
+						container.add(getClanLabel(clanRes, foundClans.getAndIncrement(), () -> showPlayers(clanRes)));
 					else
-						container.setPreferredSize(new Dimension(root.getWidth(), 100 * count.getAndDecrement()));
-					
-					if(count.get() == 0)
-						debug("no results", Color.ORANGE);
+						container.setPreferredSize(new Dimension(root.getWidth(), 100 * foundClans.get()));
 					
 					container.repaint();
-					scrollPane.revalidate();
+					container.revalidate();
+					container.getParent().revalidate();
 				} catch (IOException e) {
 					debug("Connect exception: " + e.getMessage(), Color.RED);
 					e.printStackTrace();
@@ -278,7 +350,11 @@ public class Main {
 		}
 	}
 	
-	
+	/**
+	 * creates a button to display a clan, used to display multiple clans on a stack
+	 * 
+	 *  @return a button, representing a clan label 
+	 */
 	public static JButton getClanLabel(Clan clan, int i, Runnable onClick) {
 		final var clanLabel = new JButton() {
 			private static final long serialVersionUID = 8499764229216881906L;
@@ -307,6 +383,11 @@ public class Main {
 		
 		return clanLabel;
 	}
+	/**
+	 * creates a button to display a player, used to display multiple players on a stack
+	 * 
+	 *  @return a button, representing a player label 
+	 */
 	public static JButton getPlayerLabel(Player p, int i, Runnable onClick) {
 		var label = new JButton() {
 			private static final long serialVersionUID = 8499764229216881906L;
@@ -344,6 +425,19 @@ public class Main {
 		return label;
 	}
 	
+	/**
+	 * will create and register a new thread 
+	 */
+	public static Thread thread(Runnable r) {
+		Thread thr = new Thread(r);
+		threads.add(thr);
+		return thr;
+	}
+	public static Thread thread(String name, Runnable r) {
+		Thread thr = new Thread(r, name);
+		threads.add(thr);
+		return thr;
+	}
 	
 	public static String sanitizeForURL(String text) {
 		String res = "";
