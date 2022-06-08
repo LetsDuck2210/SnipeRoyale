@@ -5,9 +5,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -56,6 +57,16 @@ public class Main {
 		debugLabel.setSize(root.getWidth(), 50);
 		root.add(debugLabel);
 		
+		var titleImage = new JLabel();
+		titleImage.setSize(600, 140);
+		try {
+			titleImage.setIcon(new ImageIcon(ImageUtil.resize(ImageIO.read(new File("assets/SnipeRoyaleTitle.jpg")), 600, titleImage.getHeight())));
+		} catch (IOException e) {
+			debug("Couldn't load title-image: " + e.getMessage(), Color.RED);
+			e.printStackTrace();
+		}
+		root.add(titleImage);
+		
 		var inSize = new Dimension(200, 40);
 		var clanInput = new JTextField();
 		clanInput.setSize(inSize);
@@ -101,10 +112,10 @@ public class Main {
 				matchExact = exactSearch.isSelected();
 				searchedPlayer = playerInput.getText();
 				
-				showClans(search(clanInput.getText(), playerInput.getText(), matchExact));
+				showAndSearchClans(clanInput.getText(), playerInput.getText(), matchExact);
 			} catch (IOException e) {
 				e.printStackTrace();
-				debug("Couldn't find clan: " + e.getMessage(), Color.RED);
+				debug("Connect exception: " + e.getMessage(), Color.RED);
 			}
 		});
 		root.add(searchButton);
@@ -113,36 +124,17 @@ public class Main {
 		
 		frame.repaint();
 	}
-	public static void showClans(Clan[] clans) {
-		if(clans.length == 1) {
-			showPlayers(clans[0]);
+	public static void showPlayers(Clan clan) {
+		if(clan.getPlayers().length == 1) {
+			showPlayer(clan.getPlayers()[0]);
 			return;
 		}
 		
 		root.removeAll();
 		
-		var container = new JLabel();
-		container.setPreferredSize(new Dimension(root.getWidth(), 100 * clans.length));
-		var scrollPane = new JScrollPane(container);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setSize(root.getSize());
-		
-		for(int i = 0; i < clans.length; i++) {
-			final var clan = clans[i];
-			
-			container.add(getClanLabel(clan, i, () -> showPlayers(clan)));
-		}
-		
-		root.add(scrollPane);
-		scrollPane.revalidate();
-	}
-	public static void showPlayers(Clan clan) {
-		root.removeAll();
-		
 		clan.onlyPlayersByName(searchedPlayer, matchExact);
 		
-		var clanName = new JLabel(clan.getName() + "(" + clan.getTag() + ")", SwingConstants.CENTER);
+		var clanName = new JLabel(clan.getName() + " (" + clan.getTag() + ")", SwingConstants.CENTER);
 		clanName.setSize(root.getWidth(), 50);
 		clanName.setFont(new Font("sans-serif", Font.BOLD, 20));
 		
@@ -170,13 +162,19 @@ public class Main {
 		try {
 			var doc = Jsoup.connect("https://royaleapi.com/player/" + player.getTag()).get();
 			var cards = doc.select("img.deck_card");
+			var levels = doc.select("h5.cardlevel");
 			for(int i = 0; i < 2; i++) {
 				for(int j = 0; j < 4; j++) {
 					var card = cards.get(j + (i * 4)).toString();
+					var level = levels.get(j + (i * 4)).toString();
 					
 					var urlPrefix = "src=\""; // src="
 					var urlStart = card.indexOf(urlPrefix) + urlPrefix.length();
 					var urlEnd = card.indexOf('"', urlStart);
+					
+					var levelStart = level.indexOf('>') + 1;
+					var levelEnd = level.indexOf('<', levelStart);
+					var levelStr = level.substring(levelStart, levelEnd);
 					
 					String imgURL = card.substring(urlStart, urlEnd);
 					Image img = ImageUtil.resize(
@@ -184,8 +182,18 @@ public class Main {
 						500 / 4,
 						-1
 					);
-					JLabel cardLabel = new JLabel();
-					cardLabel.setIcon(new ImageIcon(img));
+					JLabel cardLabel = new JLabel() {
+						private static final long serialVersionUID = 8499764229216881906L;
+						
+						@Override
+						public void paintComponent(Graphics g) {
+							g.setFont(new Font("sans-serif", Font.BOLD, 20));
+							g.drawImage(img, 0, 0, null);
+							g.setColor(Color.CYAN);
+							var lvlStr = levelStr;
+							g.drawString(lvlStr, getWidth() / 2 - (lvlStr.length() * getFont().getSize()) / 2, getHeight() - getFont().getSize());
+						}
+					};
 					cardLabel.setSize(img.getWidth(null), img.getHeight(null));
 					cardLabel.setLocation(j * cardLabel.getWidth(), i * cardLabel.getHeight());
 					root.add(cardLabel);
@@ -193,12 +201,19 @@ public class Main {
 				}
 			}
 		} catch(IOException e) {
-			debug("Couldn't load deck: " + e.getMessage(), Color.RED);
+			debug("Connect exception: " + e.getMessage(), Color.RED);
 			e.printStackTrace();
 		}
 	}
 	
 	public static void debug(String message, Color color) {
+		boolean contains = false;
+		for(var comp : root.getComponents())
+			if(comp.equals(debugLabel))
+				contains = true;
+		
+		if(!contains)
+			root.add(debugLabel);
 		debugLabel.setForeground(color);
 		debugLabel.setText(message);
 	}
@@ -209,29 +224,58 @@ public class Main {
 		});
 	}
 	
-	public static Clan[] search(String clan, String player, boolean exactMatchOnly) throws IOException {
+	public static void showAndSearchClans(String clan, String player, boolean exactMatchOnly) throws IOException {
 		var cs = sanitizeForURL(clan);
-		Document doc = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs).get();
+		Document doc = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on").get();
 		
+		root.removeAll();
+		
+		var container = new JLabel();
+		var scrollPane = new JScrollPane(container);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setSize(root.getSize());
+		
+		root.add(scrollPane);
+		scrollPane.revalidate();
 		Elements clanResults = doc.select("div.card");
-		var clans = new ArrayList<Clan>();
 		System.out.println(clanResults.size() + " clans found...");
+		AtomicInteger count = new AtomicInteger(clanResults.size());
+		container.setPreferredSize(new Dimension(root.getWidth(), 100 * count.get()));
 		for(int i = 0; i < clanResults.size(); i++) {
-			var clanRes = new Clan(clanResults.get(i).toString()); 
-			for(var playerRes : clanRes.getPlayers()) {
-				if(exactMatchOnly) {
-					if(playerRes.getName().equals(player)) {
-						clans.add(clanRes);
-						break;
+			final int j = i;
+			new Thread(() -> {
+				try {
+					Clan clanRes = new Clan(clanResults.get(j).toString());
+					boolean add = false;
+					
+					for(var playerRes : clanRes.getPlayers()) {
+						if(exactMatchOnly) {
+							if(playerRes.getName().equals(player)) {
+								add = true;
+								break;
+							}
+						} else if(playerRes.getName().toLowerCase().contains(player.toLowerCase())) {
+							add = true;
+							break;
+						}
 					}
-				} else if(playerRes.getName().toLowerCase().contains(player.toLowerCase())) {
-					clans.add(clanRes);
-					break;
+					if(add)
+						container.add(getClanLabel(clanRes, j, () -> showPlayers(clanRes)));
+					else
+						container.setPreferredSize(new Dimension(root.getWidth(), 100 * count.getAndDecrement()));
+					
+					if(count.get() == 0)
+						debug("no results", Color.ORANGE);
+					
+					container.repaint();
+					scrollPane.revalidate();
+				} catch (IOException e) {
+					debug("Connect exception: " + e.getMessage(), Color.RED);
+					e.printStackTrace();
 				}
-			}
+			}).start();
 		}
-		
-		return clans.toArray(new Clan[0]);
 	}
 	
 	
@@ -245,7 +289,7 @@ public class Main {
 				
 				g.setFont(new Font("sans-serif", 0, 20));
 				g.drawString(
-					clan.getName() + "(" + clan.getTag() + ")",
+					clan.getName() + " (" + clan.getTag() + ")",
 					getHeight() / 2 - getFont().getSize() / 2,
 					getHeight() / 2 + 8
 				);
@@ -273,7 +317,7 @@ public class Main {
 				
 				g.setFont(new Font("sans-serif", 0, 20));
 				g.drawString(
-					p.getName() + "(" + p.getTag() + ")",
+					p.getName() + " (" + p.getTag() + ")",
 					getHeight() / 2 - getFont().getSize() / 2,
 					getHeight() / 2 + 8
 				);
