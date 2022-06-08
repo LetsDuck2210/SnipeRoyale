@@ -1,1 +1,1 @@
-# SnipeRoyae
+# SnipeRoyale
