@@ -37,7 +37,7 @@ public class Main {
 	private static JFrame frame;
 	private static JPanel root;
 	private static JLabel debugLabel;
-	private static boolean matchExact;
+	private static boolean exactPlayerSearch, exactClanSearch;
 	private static String searchedPlayer;
 	private static boolean stopThread;
 	private static List<Thread> threads;
@@ -120,27 +120,35 @@ public class Main {
 		root.add(playerInputLabel);
 		root.add(playerInput);
 		
-		var exactSearch = new JCheckBox("exact match");
-		exactSearch.setSize((int) Math.round(inSize.width / 1.5), inSize.height);
-		exactSearch.setLocation(
-			playerInput.getX() - 10,
-			root.getHeight() / 2 + inSize.height
+		var exactPlayerSearch = new JCheckBox("exact match");
+		exactPlayerSearch.setSize((int) Math.round(inSize.width / 1.5), inSize.height);
+		exactPlayerSearch.setLocation(
+			playerInput.getX() + playerInput.getWidth(),
+			playerInput.getY()
 		);
-		root.add(exactSearch);
+		root.add(exactPlayerSearch);
+		var exactClanSearch = new JCheckBox("exact match");
+		exactClanSearch.setSize((int) Math.round(inSize.width / 1.5), inSize.height);
+		exactClanSearch.setLocation(
+			clanInput.getX() + clanInput.getWidth(),
+			clanInput.getY()
+		);
+		root.add(exactClanSearch);
 		
 		var searchButton = new JButton("search");
-		searchButton.setSize(inSize.width / 2, inSize.height);
+		searchButton.setSize(inSize.width, inSize.height);
 		searchButton.setLocation(
-			root.getWidth() / 2,
+			root.getWidth() / 2 - searchButton.getWidth() / 2,
 			root.getHeight() / 2 + inSize.height
 		);
 		searchButton.addActionListener(a -> {
 			try {
 				root.removeAll();
-				matchExact = exactSearch.isSelected();
+				Main.exactPlayerSearch = exactPlayerSearch.isSelected();
+				Main.exactClanSearch = exactClanSearch.isSelected();
 				searchedPlayer = playerInput.getText();
 				
-				showAndSearchClans(clanInput.getText(), playerInput.getText(), matchExact);
+				showAndSearchClans(clanInput.getText(), playerInput.getText());
 			} catch (IOException e) {
 				e.printStackTrace();
 				debug("Connect exception: " + e.getMessage(), Color.RED);
@@ -160,7 +168,7 @@ public class Main {
 		
 		root.removeAll();
 		
-		clan.onlyPlayersByName(searchedPlayer, matchExact);
+		clan.onlyPlayersByName(searchedPlayer, exactPlayerSearch);
 		
 		var clanName = new JLabel(clan.getName() + " (" + clan.getTag() + ")", SwingConstants.CENTER);
 		clanName.setSize(root.getWidth(), 50);
@@ -225,7 +233,7 @@ public class Main {
 						}
 					};
 					cardLabel.setSize(img.getWidth(null), img.getHeight(null));
-					cardLabel.setLocation(j * cardLabel.getWidth(), i * cardLabel.getHeight());
+					cardLabel.setLocation(j * cardLabel.getWidth() + 50, i * cardLabel.getHeight() + 20);
 					root.add(cardLabel);
 					root.add(homeButton);
 					root.repaint();
@@ -256,7 +264,7 @@ public class Main {
 	}
 	
 	private static AtomicInteger foundClans;
-	public static void showAndSearchClans(String clan, String player, boolean exactMatchOnly) throws IOException {
+	public static void showAndSearchClans(String clan, String player) throws IOException {
 		stopThread = false;
 		var cs = sanitizeForURL(clan);
 		Document doc = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on").get();
@@ -278,9 +286,9 @@ public class Main {
 		var clanResults = doc.select("div.card");
 		var amountResults = doc.select("div.ui.segment.attached.top").select("strong").get(0).html();
 		var num = Integer.parseInt(amountResults.substring("Found".length(), amountResults.length() - "clans".length()).trim());
-		System.out.println(clanResults.size() + " clans found...");
+		System.out.println(num + " clans found...");
 		
-		evalSearch(clan, player, exactMatchOnly, clanResults, container);
+		evalSearch(clan, player, clanResults, container);
 		scrollPane.revalidate();
 		
 		thread("showandsearch-root", () -> {
@@ -291,7 +299,7 @@ public class Main {
 					try {
 						var docP = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on&page=" + j).get();
 						var clanResultsP = docP.select("div.card");
-						evalSearch(clan, player, exactMatchOnly, clanResultsP, container);
+						evalSearch(clan, player, clanResultsP, container);
 						scrollPane.revalidate();
 					} catch (IOException e) {
 						debug("Connect exception: " + e.getMessage(), Color.RED);
@@ -306,7 +314,7 @@ public class Main {
 			}
 		}).start();
 	}
-	public static void evalSearch(String clan, String player, boolean exactMatchOnly, Elements clans, JLabel container) {
+	public static void evalSearch(String clan, String player, Elements clans, JLabel container) {
 		if(stopThread) return;
 		
 		container.setPreferredSize(new Dimension(root.getWidth(), 100 * clans.size()));
@@ -318,14 +326,22 @@ public class Main {
 			thread("evalsearch-" + i, () -> {
 				if(stopThread) return;
 				try {
-					Clan clanRes = new Clan(clans.get(j).toString());
+					Clan clanRes = new Clan(clans.get(j).toString(), !exactClanSearch);
+					if(exactClanSearch) 
+						if(clanRes.getName().equalsIgnoreCase(clan)) {
+							clanRes.loadPlayers();
+						} else {
+							container.setPreferredSize(new Dimension(root.getWidth(), 100 * foundClans.get()));
+							return;
+						}
+					;
 					boolean add = false;
 					
 					for(var playerRes : clanRes.getPlayers()) {
 						if(stopThread) return;
 						
-						if(exactMatchOnly) {
-							if(playerRes.getName().equals(player)) {
+						if(exactPlayerSearch) {
+							if(playerRes.getName().equalsIgnoreCase(player)) {
 								add = true;
 								break;
 							}

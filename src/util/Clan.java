@@ -22,12 +22,13 @@ public class Clan {
 	 * 
 	 *  @param clanResult	the html div of a clan result
 	 */
-	public Clan(String clanResult) throws MalformedURLException, IOException {
+	public Clan(String clanResult, boolean loadPlayers) throws MalformedURLException, IOException {
 		name = getClanName(clanResult);
 		tag = getClanTag(clanResult);
 		badge = getClanBadge(clanResult);
 		
-		players = getClanPlayers(tag);
+		if(loadPlayers)
+			loadPlayers();
 	}
 	public Clan(String name, String tag, Image badge, List<Player> players) {
 		this.name = name;
@@ -46,6 +47,9 @@ public class Clan {
 	}
 	public Player[] getPlayers() {
 		return players.toArray(new Player[0]);
+	}
+	public void loadPlayers() throws IOException {
+		players = getClanPlayers(tag);
 	}
 	public void onlyPlayersByName(String name, boolean matchExact) {
 		players.removeIf(new Predicate<Player>() {
