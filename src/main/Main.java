@@ -161,14 +161,14 @@ public class Main {
 		frame.repaint();
 	}
 	public static void showPlayers(Clan clan) {
-		if(clan.getPlayers().length == 1) {
-			showPlayer(clan.getPlayers()[0]);
-			return;
-		}
-		
 		root.removeAll();
 		
 		clan.onlyPlayersByName(searchedPlayer, exactPlayerSearch);
+		
+		if(clan.getPlayers().length == 1) {
+			showPlayer(clan, clan.getPlayers()[0]);
+			return;
+		}
 		
 		var clanName = new JLabel(clan.getName() + " (" + clan.getTag() + ")", SwingConstants.CENTER);
 		clanName.setSize(root.getWidth(), 50);
@@ -184,13 +184,13 @@ public class Main {
 		playerScrollPane.setSize(root.getWidth(), root.getHeight() - homeButton.getHeight() * 2);
 		for(int j = 0; j < clan.getPlayers().length; j++) {
 			Player p = clan.getPlayers()[j];
-			playerContainer.add(getPlayerLabel(p, j + 1, () -> showPlayer(p)));
+			playerContainer.add(getPlayerLabel(p, j + 1, () -> showPlayer(clan, p)));
 		}
 		root.add(playerScrollPane);
 		root.add(homeButton);
 		playerScrollPane.revalidate();
 	}
-	public static void showPlayer(Player player) {
+	public static void showPlayer(Clan clan, Player player) {
 		root.removeAll();
 		root.repaint();
 		stopThread = true;
@@ -233,9 +233,24 @@ public class Main {
 						}
 					};
 					cardLabel.setSize(img.getWidth(null), img.getHeight(null));
-					cardLabel.setLocation(j * cardLabel.getWidth() + 50, i * cardLabel.getHeight() + 20);
+					cardLabel.setLocation(j * cardLabel.getWidth() + 50, i * cardLabel.getHeight() + 50);
+					
+					String nameLabelStr = "👤" + player.getName() + "  🛡" + clan.getName();
+					JLabel nameLabel = new JLabel(nameLabelStr);
+					nameLabel.setFont(new Font("sans-serif", Font.BOLD, 16));
+					nameLabel.setSize(root.getWidth(), 40);
+					nameLabel.setLocation(50, 10);
+					
+					JLabel trophyLabel = new JLabel("🏆" + player.getTrophies());
+					trophyLabel.setFont(nameLabel.getFont());
+					trophyLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+					trophyLabel.setSize(root.getWidth() - 50, 40);
+					trophyLabel.setLocation(0, 10);
+					
 					root.add(cardLabel);
 					root.add(homeButton);
+					root.add(nameLabel);
+					root.add(trophyLabel);
 					root.repaint();
 				}
 			}
@@ -289,6 +304,11 @@ public class Main {
 		System.out.println(num + " clans found...");
 		
 		evalSearch(clan, player, clanResults, container);
+		System.out.println(container.getComponents().length);
+		if(num == 1) {
+			while(container.getComponents().length < 1) { } 
+			if(container.getComponent(0) instanceof JButton button) button.doClick();
+		}
 		scrollPane.revalidate();
 		
 		thread("showandsearch-root", () -> {
