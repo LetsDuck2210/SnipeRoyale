@@ -278,12 +278,13 @@ public class Main {
 		});
 	}
 	
-	private static AtomicInteger foundClans;
+	private static AtomicInteger foundClans, searchingThreads;
 	public static void showAndSearchClans(String clan, String player) throws IOException {
 		stopThread = false;
 		var cs = sanitizeForURL(clan);
 		Document doc = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on").get();
 		foundClans = new AtomicInteger();
+		searchingThreads = new AtomicInteger();
 		
 		root.removeAll();
 		
@@ -312,6 +313,7 @@ public class Main {
 		scrollPane.revalidate();
 		
 		thread("showandsearch-root", () -> {
+			searchingThreads.getAndIncrement();
 			for(int i = 2; i <= Math.floor(num / 60); i++) {
 				if(stopThread) return;
 				final int j = i;
@@ -325,12 +327,24 @@ public class Main {
 						debug("Connect exception: " + e.getMessage(), Color.RED);
 						e.printStackTrace();
 					}
+					
+					threads.remove(Thread.currentThread());
 				}).start();
 				try {
-					Thread.sleep(750 * i);
+					Thread.sleep(1250);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+			}
+			
+			searchingThreads.getAndIncrement();
+			threads.remove(Thread.currentThread());
+		}).start();
+		
+		thread("check-one-clan", () -> {
+			while(searchingThreads.get() > 0 && !stopThread) { }
+			if(foundClans.get() == 1 && !stopThread) {
+				if(container.getComponent(0) instanceof JButton button) button.doClick();
 			}
 		}).start();
 	}
@@ -345,6 +359,9 @@ public class Main {
 			final int j = i;
 			thread("evalsearch-" + i, () -> {
 				if(stopThread) return;
+				
+				searchingThreads.getAndIncrement();
+				
 				try {
 					Clan clanRes = new Clan(clans.get(j).toString(), !exactClanSearch);
 					if(exactClanSearch) 
@@ -382,6 +399,7 @@ public class Main {
 					debug("Connect exception: " + e.getMessage(), Color.RED);
 					e.printStackTrace();
 				}
+				searchingThreads.getAndDecrement();
 			}).start();
 		}
 	}
