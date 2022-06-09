@@ -6,14 +6,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -64,13 +62,11 @@ public class Main {
 		
 		final var buttonSize = 32;
 		homeButton = new JButton();
-		try {
-			homeButton.setIcon(new ImageIcon(ImageUtil.resize(ImageUtil.load("assets/Home.png"), buttonSize, buttonSize)));
-		} catch (IOException e) {
+		homeButton.setSize(buttonSize, buttonSize);
+		ImageUtil.loadFile("assets/Home.png").to(homeButton).catchErr(e -> {
 			debug("Couldn't read image(assets/Home.png): " + e.getMessage(), Color.RED);
 			e.printStackTrace();
-		}
-		homeButton.setSize(buttonSize, buttonSize);
+		});
 		homeButton.setLocation(4, root.getHeight() - buttonSize * 2);
 		homeButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		homeButton.addActionListener(a -> {
@@ -87,12 +83,10 @@ public class Main {
 		
 		var titleImage = new JLabel();
 		titleImage.setSize(600, 140);
-		try {
-			titleImage.setIcon(new ImageIcon(ImageUtil.resize(ImageUtil.load("assets/SnipeRoyaleTitle.jpg"), 600, titleImage.getHeight())));
-		} catch (IOException e) {
+		ImageUtil.loadFile("assets/SnipeRoyaleTitle.jpg").to(titleImage).catchErr(e -> {
 			debug("Couldn't load title-image: " + e.getMessage(), Color.RED);
 			e.printStackTrace();
-		}
+		});
 		root.add(titleImage);
 		
 		var inSize = new Dimension(200, 40);
@@ -201,6 +195,11 @@ public class Main {
 			var doc = Jsoup.connect("https://royaleapi.com/player/" + player.getTag()).get();
 			var cards = doc.select("img.deck_card");
 			var levels = doc.select("h5.cardlevel");
+			JLabel container = new JLabel();
+			container.setSize(root.getSize());
+			container.setBackground(Color.WHITE);
+			container.setOpaque(true);
+			root.add(container);
 			for(int i = 0; i < 2; i++) {
 				for(int j = 0; j < 4; j++) {
 					var card = cards.get(j + (i * 4)).toString();
@@ -214,25 +213,40 @@ public class Main {
 					var levelEnd = level.indexOf('<', levelStart);
 					var levelStr = level.substring(levelStart, levelEnd);
 					
-					String imgURL = card.substring(urlStart, urlEnd);
-					Image img = ImageUtil.resize(
-						ImageIO.read(new URL(imgURL)),
-						500 / 4,
-						-1
-					);
+					var imgURL = card.substring(urlStart, urlEnd);
+					var imgRef = new AtomicReference<Image>();
+					var loader = ImageUtil.loadURL(imgURL).to(imgRef);
+//					var img = ImageUtil.resize(
+//						ImageUtil.loadURL(imgURL).sync(),
+//						500 / 4,
+//						-1
+//					);
+					
 					JLabel cardLabel = new JLabel() {
 						private static final long serialVersionUID = 8499764229216881906L;
 						
 						@Override
 						public void paintComponent(Graphics g) {
+							super.paintComponent(g);
+							
 							g.setFont(new Font("sans-serif", Font.BOLD, 20));
-							g.drawImage(img, 0, 0, null);
+							if(imgRef.get() != null) {
+								Image img = ImageUtil.resize(
+									imgRef.get(),
+									500 / 4,
+									-1
+								);
+								g.drawImage(img, 0, 0, null);
+								setSize(img.getWidth(null), img.getHeight(null));
+							}
 							g.setColor(Color.CYAN);
 							var lvlStr = levelStr;
 							g.drawString(lvlStr, getWidth() / 2 - (lvlStr.length() * getFont().getSize()) / 2, getHeight() - getFont().getSize());
 						}
 					};
-					cardLabel.setSize(img.getWidth(null), img.getHeight(null));
+					cardLabel.setSize(125, 150);
+					loader.repaint(cardLabel);
+					cardLabel.repaint();
 					cardLabel.setLocation(j * cardLabel.getWidth() + 50, i * cardLabel.getHeight() + 50);
 					
 					String nameLabelStr = "👤" + player.getName() + "  🛡" + clan.getName();
@@ -247,11 +261,11 @@ public class Main {
 					trophyLabel.setSize(root.getWidth() - 50, 40);
 					trophyLabel.setLocation(0, 10);
 					
-					root.add(cardLabel);
-					root.add(homeButton);
-					root.add(nameLabel);
-					root.add(trophyLabel);
-					root.repaint();
+					container.add(cardLabel);
+					container.add(homeButton);
+					container.add(nameLabel);
+					container.add(trophyLabel);
+					container.repaint();
 				}
 			}
 		} catch(IOException e) {
