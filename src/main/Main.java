@@ -308,14 +308,18 @@ public class Main {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setSize(root.getWidth(), root.getHeight() - 64);
 		
-		root.add(scrollPane);
-		root.add(homeButton);
-		root.repaint();	
-		scrollPane.revalidate();
-		
 		var clanResults = doc.select("div.card");
 		var amountResults = doc.select("div.ui.segment.attached.top").select("strong").get(0).html();
 		var num = Integer.parseInt(amountResults.substring("Found".length(), amountResults.length() - "clans".length()).trim());
+		JLabel info = new JLabel(num + " clan" + (num != 1 ? "s" : ""));
+		info.setSize(100, 32);
+		info.setHorizontalAlignment(SwingConstants.RIGHT);
+		info.setLocation(root.getWidth() - info.getWidth() - 4, root.getHeight() - info.getHeight() * 2);
+		root.add(info);
+		root.add(scrollPane);
+		root.add(homeButton);
+		root.repaint();
+		scrollPane.revalidate();
 		System.out.println(num + " clans found...");
 		
 		evalSearch(clan, player, clanResults, container);
