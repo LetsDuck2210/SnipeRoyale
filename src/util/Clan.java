@@ -26,7 +26,7 @@ public class Clan {
 		name = getClanName(clanResult);
 		tag = getClanTag(clanResult);
 		badge = getClanBadge(clanResult);
-		
+	
 		if(loadPlayers)
 			loadPlayers();
 	}

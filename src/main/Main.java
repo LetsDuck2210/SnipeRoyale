@@ -1,16 +1,29 @@
 package main;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -26,6 +39,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import net.sourceforge.tess4j.TesseractException;
 import util.AutoResize;
 import util.Clan;
 import util.ImageUtil;
@@ -36,15 +50,40 @@ public class Main {
 	private static JPanel root;
 	private static JLabel debugLabel;
 	private static boolean exactPlayerSearch, exactClanSearch;
-	private static String searchedPlayer;
 	private static boolean stopThread;
 	private static List<Thread> threads;
 	
 	private static JButton homeButton;
+	private static JButton backButton;
 	
+	private static String searchedClan;
+	private static String searchedPlayer;
+	private static Clan currentClan;
+
+	public static void debug(String message, Color color) {
+		boolean contains = false;
+		for(var comp : root.getComponents())
+			if(comp.equals(debugLabel))
+				contains = true;
+		
+		if(!contains)
+			root.add(debugLabel);
+		debugLabel.setForeground(color);
+		debugLabel.setText(message);
+	}
+	
+	public static void main(String[] args) throws AWTException, InterruptedException, IOException, TesseractException {
+//		Thread.sleep(5000);
+		Toolkit.getDefaultToolkit().beep();
+//		final String server = "192.168.178.148";
+//		scan(server);
+		SwingUtilities.invokeLater(() -> {
+			showFrame();
+		});
+	}
 	public static void setupFrame() {
 		frame = new JFrame("SnipeRoyale");
-		frame.setSize(600, 400);
+		frame.setSize(600, 416);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(3);
 		frame.setResizable(false);
@@ -67,12 +106,38 @@ public class Main {
 			debug("Couldn't read image(assets/Home.png): " + e.getMessage(), Color.RED);
 			e.printStackTrace();
 		});
-		homeButton.setLocation(4, root.getHeight() - buttonSize * 2);
+		homeButton.setLocation(4 + buttonSize, root.getHeight() - buttonSize * 2);
 		homeButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		homeButton.addActionListener(a -> {
 			root.removeAll();
 			showFrame();
 			stopThread = true;
+		});
+		
+		backButton = new JButton();
+		backButton.setSize(buttonSize, buttonSize);
+		ImageUtil.loadFile("assets/Back.png").to(backButton).catchErr(e -> {
+			debug("Couldn't read image(assets/Home.png): " + e.getMessage(), Color.RED);
+			e.printStackTrace();
+		});
+		backButton.setLocation(homeButton.getX() - buttonSize, homeButton.getY());
+		backButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		backButton.addActionListener(a -> {
+			switch(a.getActionCommand()) {
+				case "clans" -> {
+					try {
+						showAndSearchClans(searchedClan, searchedPlayer, false);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						debug("Connect exception: " + e1.getMessage(), Color.RED);
+					}
+					break;
+				}
+				case "players" -> {
+					showPlayers(currentClan, false);
+					break;
+				}
+			}
 		});
 		
 		threads = new ArrayList<>();
@@ -141,8 +206,9 @@ public class Main {
 				Main.exactPlayerSearch = exactPlayerSearch.isSelected();
 				Main.exactClanSearch = exactClanSearch.isSelected();
 				searchedPlayer = playerInput.getText();
+				searchedClan = clanInput.getText();
 				
-				showAndSearchClans(clanInput.getText(), playerInput.getText());
+				showAndSearchClans(searchedClan, searchedPlayer, true);
 			} catch (IOException e) {
 				e.printStackTrace();
 				debug("Connect exception: " + e.getMessage(), Color.RED);
@@ -154,12 +220,12 @@ public class Main {
 		
 		frame.repaint();
 	}
-	public static void showPlayers(Clan clan) {
+	public static void showPlayers(Clan clan, boolean loadWhenSingle) {
 		root.removeAll();
 		
 		clan.onlyPlayersByName(searchedPlayer, exactPlayerSearch);
 		
-		if(clan.getPlayers().length == 1) {
+		if(clan.getPlayers().length == 1 && loadWhenSingle) {
 			showPlayer(clan, clan.getPlayers()[0]);
 			return;
 		}
@@ -180,7 +246,10 @@ public class Main {
 			Player p = clan.getPlayers()[j];
 			playerContainer.add(getPlayerLabel(p, j + 1, () -> showPlayer(clan, p)));
 		}
+		backButton.setActionCommand("clans");
+		
 		root.add(playerScrollPane);
+		root.add(backButton);
 		root.add(homeButton);
 		playerScrollPane.revalidate();
 	}
@@ -188,13 +257,14 @@ public class Main {
 		root.removeAll();
 		root.repaint();
 		stopThread = true;
+		currentClan = clan;
 		
 		System.out.println("loading deck " + player + "...");
 		
 		try {
 			var doc = Jsoup.connect("https://royaleapi.com/player/" + player.getTag()).get();
 			var cards = doc.select("img.deck_card");
-			var levels = doc.select("h5.cardlevel");
+			var levels = doc.select("div.card-level");
 			JLabel container = new JLabel();
 			container.setSize(root.getSize());
 			container.setBackground(Color.WHITE);
@@ -209,9 +279,9 @@ public class Main {
 					var urlStart = card.indexOf(urlPrefix) + urlPrefix.length();
 					var urlEnd = card.indexOf('"', urlStart);
 					
-					var levelStart = level.indexOf('>') + 1;
-					var levelEnd = level.indexOf('<', levelStart);
-					var levelStr = level.substring(levelStart, levelEnd);
+					var levelEnd = level.lastIndexOf('<');
+					var levelStart = level.lastIndexOf('>', levelEnd);
+					var levelStr = "Lvl " + level.substring(levelStart + 1, levelEnd - 1).trim();
 					
 					var imgURL = card.substring(urlStart, urlEnd);
 					var imgRef = new AtomicReference<Image>();
@@ -261,8 +331,11 @@ public class Main {
 					trophyLabel.setSize(root.getWidth() - 50, 40);
 					trophyLabel.setLocation(0, 10);
 					
+					backButton.setActionCommand("players");
+					
 					container.add(cardLabel);
 					container.add(homeButton);
+					container.add(backButton);
 					container.add(nameLabel);
 					container.add(trophyLabel);
 					container.repaint();
@@ -273,27 +346,50 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void debug(String message, Color color) {
-		boolean contains = false;
-		for(var comp : root.getComponents())
-			if(comp.equals(debugLabel))
-				contains = true;
+	public static void scan(String server) throws AWTException, IOException, TesseractException {
+		var screenshot = new Robot().createScreenCapture(new Rectangle(640, 50, 150, 23) /*new Rectangle(40, 0, 60, 22)*/);
+		ImageIO.write(screenshot, "png", new File("assets/temp.png"));
 		
-		if(!contains)
-			root.add(debugLabel);
-		debugLabel.setForeground(color);
-		debugLabel.setText(message);
+		System.out.println(server);
+		var client = new Socket(server, 12232);
+		var writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+		var str = new ByteArrayOutputStream();
+		ImageIO.write(screenshot, "png", str);
+		var imgData = Base64.getEncoder().encodeToString(str.toByteArray());
+		
+		writer.write('"' + "img-data\":\"" + imgData + '"');
+		writer.newLine();
+		writer.flush();
+		
+		var reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+		String line = "";
+		while((line = reader.readLine()) != null) {
+			var startStr = "\"result\":\"";
+			var start = line.indexOf(startStr) + startStr.length();
+			var end = line.indexOf('"', start + 1);
+			if(start > 0 && end > 0) {
+				var result = line.substring(start, end);
+				
+				System.out.println(result);
+			}
+		}
+		
+		client.close();
+		
+//		Tesseract tesseract = new Tesseract();
+//        tesseract.setDatapath("tessdata");
+//        tesseract.setTessVariable("TESSDATA_PREFIX", "tessdata");
+//        tesseract.setLanguage("eng");
+//        tesseract.setOcrEngineMode(1);
+////        tesseract.setVariable("tessedit_create_hocr", "1");
+////        tesseract.setVariable("TESSDATA_PREFIX", "tessdata");
+//        String res = tesseract.doOCR(screenshot);
+//        System.out.println(res);
 	}
 	
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			showFrame();
-		});
-	}
 	
 	private static AtomicInteger foundClans, searchingThreads;
-	public static void showAndSearchClans(String clan, String player) throws IOException {
+	public static void showAndSearchClans(String clan, String player, boolean loadWhenSingle) throws IOException {
 		stopThread = false;
 		var cs = sanitizeForURL(clan);
 		Document doc = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on").get();
@@ -324,7 +420,7 @@ public class Main {
 		
 		evalSearch(clan, player, clanResults, container);
 		System.out.println(container.getComponents().length);
-		if(num == 1) {
+		if(num == 1 && loadWhenSingle) {
 			while(container.getComponents().length < 1) { } 
 			if(container.getComponent(0) instanceof JButton button) button.doClick();
 		}
@@ -359,12 +455,13 @@ public class Main {
 			threads.remove(Thread.currentThread());
 		}).start();
 		
-		thread("check-one-clan", () -> {
-			while(searchingThreads.get() > 0 && !stopThread) { }
-			if(foundClans.get() == 1 && !stopThread) {
-				if(container.getComponent(0) instanceof JButton button) button.doClick();
-			}
-		}).start();
+		if(loadWhenSingle)
+			thread("check-one-clan", () -> {
+				while(searchingThreads.get() > 0 && !stopThread) { }
+				if(foundClans.get() == 1 && !stopThread) {
+					if(container.getComponent(0) instanceof JButton button) button.doClick();
+				}
+			}).start();
 	}
 	public static void evalSearch(String clan, String player, Elements clans, JLabel container) {
 		if(stopThread) return;
@@ -406,7 +503,7 @@ public class Main {
 						}
 					}
 					if(add)
-						container.add(getClanLabel(clanRes, foundClans.getAndIncrement(), () -> showPlayers(clanRes)));
+						container.add(getClanLabel(clanRes, foundClans.getAndIncrement(), () -> showPlayers(clanRes, true)));
 					else
 						container.setPreferredSize(new Dimension(root.getWidth(), 100 * foundClans.get()));
 					
