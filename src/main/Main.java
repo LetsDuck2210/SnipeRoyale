@@ -270,12 +270,6 @@ public class Main {
 			trophyLabel.setSize(root.getWidth() - 50, 40);
 			trophyLabel.setLocation(0, 10);
 			
-			JCheckBox showWarDecks = new JCheckBox("⚔️");
-			showWarDecks.setLocation(container.getWidth() - 112, container.getHeight() - 86);
-			showWarDecks.addActionListener(a -> {
-				
-			});
-			
 			backButton.setActionCommand("players");
 			
 			container.add(homeButton);
