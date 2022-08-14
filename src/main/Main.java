@@ -6,24 +6,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Robot;
 import java.awt.Toolkit;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -75,8 +64,6 @@ public class Main {
 	public static void main(String[] args) throws AWTException, InterruptedException, IOException, TesseractException {
 //		Thread.sleep(5000);
 		Toolkit.getDefaultToolkit().beep();
-//		final String server = "192.168.178.148";
-//		scan(server);
 		SwingUtilities.invokeLater(() -> {
 			showFrame();
 		});
@@ -194,7 +181,7 @@ public class Main {
 		);
 		root.add(exactClanSearch);
 		
-		var searchButton = new JButton("search");
+		var searchButton = new JButton("snipe");
 		searchButton.setSize(inSize.width, inSize.height);
 		searchButton.setLocation(
 			root.getWidth() / 2 - searchButton.getWidth() / 2,
@@ -253,6 +240,7 @@ public class Main {
 		root.add(homeButton);
 		playerScrollPane.revalidate();
 	}
+	
 	public static void showPlayer(Clan clan, Player player) {
 		root.removeAll();
 		root.repaint();
@@ -262,131 +250,76 @@ public class Main {
 		System.out.println("loading deck " + player + "...");
 		
 		try {
-			var doc = Jsoup.connect("https://royaleapi.com/player/" + player.getTag()).get();
-			var cards = doc.select("img.deck_card");
-			var levels = doc.select("div.card-level");
 			JLabel container = new JLabel();
 			container.setSize(root.getSize());
 			container.setBackground(Color.WHITE);
 			container.setOpaque(true);
 			root.add(container);
-			for(int i = 0; i < 2; i++) {
-				for(int j = 0; j < 4; j++) {
-					var card = cards.get(j + (i * 4)).toString();
-					var level = levels.get(j + (i * 4)).toString();
-					
-					var urlPrefix = "src=\""; // src="
-					var urlStart = card.indexOf(urlPrefix) + urlPrefix.length();
-					var urlEnd = card.indexOf('"', urlStart);
-					
-					var levelEnd = level.lastIndexOf('<');
-					var levelStart = level.lastIndexOf('>', levelEnd);
-					var levelStr = "Lvl " + level.substring(levelStart + 1, levelEnd - 1).trim();
-					
-					var imgURL = card.substring(urlStart, urlEnd);
-					var imgRef = new AtomicReference<Image>();
-					var loader = ImageUtil.loadURL(imgURL).to(imgRef);
-//					var img = ImageUtil.resize(
-//						ImageUtil.loadURL(imgURL).sync(),
-//						500 / 4,
-//						-1
-//					);
-					
-					JLabel cardLabel = new JLabel() {
-						private static final long serialVersionUID = 8499764229216881906L;
-						
-						@Override
-						public void paintComponent(Graphics g) {
-							super.paintComponent(g);
-							
-							g.setFont(new Font("sans-serif", Font.BOLD, 20));
-							if(imgRef.get() != null) {
-								Image img = ImageUtil.resize(
-									imgRef.get(),
-									500 / 4,
-									-1
-								);
-								g.drawImage(img, 0, 0, null);
-								setSize(img.getWidth(null), img.getHeight(null));
-							}
-							g.setColor(Color.CYAN);
-							var lvlStr = levelStr;
-							g.drawString(lvlStr, getWidth() / 2 - (lvlStr.length() * getFont().getSize()) / 2, getHeight() - getFont().getSize());
-						}
-					};
-					cardLabel.setSize(125, 150);
-					loader.repaint(cardLabel);
-					cardLabel.repaint();
-					cardLabel.setLocation(j * cardLabel.getWidth() + 50, i * cardLabel.getHeight() + 50);
-					
-					String nameLabelStr = "👤" + player.getName() + "  🛡" + clan.getName();
-					JLabel nameLabel = new JLabel(nameLabelStr);
-					nameLabel.setFont(new Font("sans-serif", Font.BOLD, 16));
-					nameLabel.setSize(root.getWidth(), 40);
-					nameLabel.setLocation(50, 10);
-					
-					JLabel trophyLabel = new JLabel("🏆" + player.getTrophies());
-					trophyLabel.setFont(nameLabel.getFont());
-					trophyLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-					trophyLabel.setSize(root.getWidth() - 50, 40);
-					trophyLabel.setLocation(0, 10);
-					
-					backButton.setActionCommand("players");
-					
-					container.add(cardLabel);
-					container.add(homeButton);
-					container.add(backButton);
-					container.add(nameLabel);
-					container.add(trophyLabel);
-					container.repaint();
-				}
-			}
+			
+			drawMainDeck(container, player);
+			
+			String nameLabelStr = "👤" + player.getName() + "  🛡" + clan.getName();
+			JLabel nameLabel = new JLabel(nameLabelStr);
+			nameLabel.setFont(new Font("sans-serif", Font.BOLD, 16));
+			nameLabel.setSize(root.getWidth(), 40);
+			nameLabel.setLocation(50, 10);
+			
+			JLabel trophyLabel = new JLabel("🏆" + player.getTrophies());
+			trophyLabel.setFont(nameLabel.getFont());
+			trophyLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			trophyLabel.setSize(root.getWidth() - 50, 40);
+			trophyLabel.setLocation(0, 10);
+			
+			JCheckBox showWarDecks = new JCheckBox("⚔️");
+			showWarDecks.setLocation(container.getWidth() - 112, container.getHeight() - 86);
+			showWarDecks.addActionListener(a -> {
+				
+			});
+			
+			backButton.setActionCommand("players");
+			
+			container.add(homeButton);
+			container.add(backButton);
+			container.add(nameLabel);
+			container.add(trophyLabel);
+			container.repaint();
 		} catch(IOException e) {
 			debug("Connect exception: " + e.getMessage(), Color.RED);
 			e.printStackTrace();
 		}
 	}
-	public static void scan(String server) throws AWTException, IOException, TesseractException {
-		var screenshot = new Robot().createScreenCapture(new Rectangle(640, 50, 150, 23) /*new Rectangle(40, 0, 60, 22)*/);
-		ImageIO.write(screenshot, "png", new File("assets/temp.png"));
-		
-		System.out.println(server);
-		var client = new Socket(server, 12232);
-		var writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-		var str = new ByteArrayOutputStream();
-		ImageIO.write(screenshot, "png", str);
-		var imgData = Base64.getEncoder().encodeToString(str.toByteArray());
-		
-		writer.write('"' + "img-data\":\"" + imgData + '"');
-		writer.newLine();
-		writer.flush();
-		
-		var reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-		String line = "";
-		while((line = reader.readLine()) != null) {
-			var startStr = "\"result\":\"";
-			var start = line.indexOf(startStr) + startStr.length();
-			var end = line.indexOf('"', start + 1);
-			if(start > 0 && end > 0) {
-				var result = line.substring(start, end);
-				
-				System.out.println(result);
-			}
+	private static Elements cardsMainDeck, levelsMainDeck;
+	public static void drawMainDeck(JLabel container, Player player) throws IOException {
+		if(cardsMainDeck == null || levelsMainDeck == null) {
+			var doc = Jsoup.connect("https://royaleapi.com/player/" + player.getTag()).get();
+			cardsMainDeck = doc.select("img.deck_card");
+			levelsMainDeck = doc.select("div.card-level");
 		}
 		
-		client.close();
-		
-//		Tesseract tesseract = new Tesseract();
-//        tesseract.setDatapath("tessdata");
-//        tesseract.setTessVariable("TESSDATA_PREFIX", "tessdata");
-//        tesseract.setLanguage("eng");
-//        tesseract.setOcrEngineMode(1);
-////        tesseract.setVariable("tessedit_create_hocr", "1");
-////        tesseract.setVariable("TESSDATA_PREFIX", "tessdata");
-//        String res = tesseract.doOCR(screenshot);
-//        System.out.println(res);
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 4; j++) {
+				var card = cardsMainDeck.get(j + (i * 4)).toString();
+				var level = levelsMainDeck.get(j + (i * 4)).toString();
+				
+				var urlPrefix = "src=\""; // src="
+				var urlStart = card.indexOf(urlPrefix) + urlPrefix.length();
+				var urlEnd = card.indexOf('"', urlStart);
+				
+				var levelEnd = level.lastIndexOf('<');
+				var levelStart = level.lastIndexOf('>', levelEnd);
+				var levelI = Integer.parseInt(level.substring(levelStart + 1, levelEnd - 1).trim());
+				
+				var imgURL = card.substring(urlStart, urlEnd);
+				var imgRef = new AtomicReference<Image>();
+				var loader = ImageUtil.loadURL(imgURL).to(imgRef);
+				
+				var cardLabel = getCardLabel(loader, imgRef, levelI);
+				cardLabel.setLocation(j * cardLabel.getWidth() + 50, i * cardLabel.getHeight() + 50);
+				
+				container.add(cardLabel);
+			}
+		}
 	}
-	
 	
 	private static AtomicInteger foundClans, searchingThreads;
 	public static void showAndSearchClans(String clan, String player, boolean loadWhenSingle) throws IOException {
@@ -592,6 +525,36 @@ public class Main {
 		label.addActionListener(a -> onClick.run());
 		
 		return label;
+	}
+	
+	public static JLabel getCardLabel(ImageUtil loader, AtomicReference<Image> imgRef, int level) {
+		JLabel cardLabel = new JLabel() {
+			private static final long serialVersionUID = 8499764229216881906L;
+			
+			@Override
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				
+				g.setFont(new Font("sans-serif", Font.BOLD, 20));
+				if(imgRef.get() != null) {
+					Image img = ImageUtil.resize(
+						imgRef.get(),
+						500 / 4,
+						-1
+					);
+					g.drawImage(img, 0, 0, null);
+					setSize(img.getWidth(null), img.getHeight(null));
+				}
+				g.setColor(Color.CYAN);
+				var lvlStr = "Lvl " + level;
+				g.drawString(lvlStr, getWidth() / 2 - (lvlStr.length() * getFont().getSize()) / 2, getHeight() - getFont().getSize());
+			}
+		};
+		cardLabel.setSize(125, 150);
+		loader.repaint(cardLabel);
+		cardLabel.repaint();
+		
+		return cardLabel;
 	}
 	
 	/**
