@@ -9,7 +9,9 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -241,13 +243,13 @@ public class Main {
 		playerScrollPane.revalidate();
 	}
 	
+	private static boolean showMainDeck = true;
 	public static void showPlayer(Clan clan, Player player) {
 		root.removeAll();
 		root.repaint();
 		stopThread = true;
 		currentClan = clan;
 		
-		System.out.println("loading deck " + player + "...");
 		
 		try {
 			JLabel container = new JLabel();
@@ -256,7 +258,15 @@ public class Main {
 			container.setOpaque(true);
 			root.add(container);
 			
-			drawMainDeck(container, player);
+			JLabel deckContainer = new JLabel();
+			deckContainer.setLocation(50, 50);
+			deckContainer.setSize(root.getWidth() - 50, root.getHeight() - 120);
+			deckContainer.setBackground(Color.WHITE);
+			deckContainer.setOpaque(true);
+			container.add(deckContainer);
+			
+			drawMainDeck(deckContainer, player);
+			showMainDeck = true;
 			
 			String nameLabelStr = "👤" + player.getName() + "  🛡" + clan.getName();
 			JLabel nameLabel = new JLabel(nameLabelStr);
@@ -270,10 +280,34 @@ public class Main {
 			trophyLabel.setSize(root.getWidth() - 50, 40);
 			trophyLabel.setLocation(0, 10);
 			
+			JButton swapDecks = new JButton("\u2694");
+			swapDecks.setSize(homeButton.getSize());
+			swapDecks.setLocation(container.getWidth() - swapDecks.getWidth(), container.getHeight() - 2 * swapDecks.getHeight());
+			swapDecks.setFont(new Font("sans-serif", 0, 20));
+			swapDecks.addActionListener(a -> {
+				deckContainer.removeAll();
+				showMainDeck = !showMainDeck;
+				
+				if(showMainDeck) {
+					try {
+						drawMainDeck(deckContainer, player);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						drawBattleDeck(deckContainer, player);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
 			backButton.setActionCommand("players");
 			
 			container.add(homeButton);
 			container.add(backButton);
+			container.add(swapDecks);
 			container.add(nameLabel);
 			container.add(trophyLabel);
 			container.repaint();
@@ -282,44 +316,53 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-	private static Elements cardsMainDeck, levelsMainDeck;
 	public static void drawMainDeck(JLabel container, Player player) throws IOException {
-		if(cardsMainDeck == null || levelsMainDeck == null) {
-			var doc = Jsoup.connect("https://royaleapi.com/player/" + player.getTag()).get();
-			cardsMainDeck = doc.select("img.deck_card");
-			levelsMainDeck = doc.select("div.card-level");
-		}
+		container.removeAll();
+		var deck = player.getMainDeck();
+		var iter = deck.keySet().iterator();
+		System.out.println("main deck");
 		
 		for(int i = 0; i < 2; i++) {
 			for(int j = 0; j < 4; j++) {
-				var card = cardsMainDeck.get(j + (i * 4)).toString();
-				var level = levelsMainDeck.get(j + (i * 4)).toString();
+				var loader = iter.next();
 				
-				var urlPrefix = "src=\""; // src="
-				var urlStart = card.indexOf(urlPrefix) + urlPrefix.length();
-				var urlEnd = card.indexOf('"', urlStart);
-				
-				var levelEnd = level.lastIndexOf('<');
-				var levelStart = level.lastIndexOf('>', levelEnd);
-				var levelI = Integer.parseInt(level.substring(levelStart + 1, levelEnd - 1).trim());
-				
-				var imgURL = card.substring(urlStart, urlEnd);
-				var imgRef = new AtomicReference<Image>();
-				var loader = ImageUtil.loadURL(imgURL).to(imgRef);
-				
-				var cardLabel = getCardLabel(loader, imgRef, levelI);
-				cardLabel.setLocation(j * cardLabel.getWidth() + 50, i * cardLabel.getHeight() + 50);
+				var cardLabel = getCardLabel(loader, loader.getReference(), deck.get(loader));
+				cardLabel.setLocation(j * cardLabel.getWidth(), i * cardLabel.getHeight());
+				System.out.println(j + ", " + i);
 				
 				container.add(cardLabel);
 			}
 		}
+		container.repaint();
+	}
+	public static void drawBattleDeck(JLabel container, Player player) throws IOException {
+		container.removeAll();
+		var deck = player.getBattleDeck();
+		var iter = deck.keySet().iterator();
+		System.out.println("battle deck");
+		
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 4; j++) {
+				if(iter.hasNext()) {
+					var loader = iter.next();
+					
+					var cardLabel = getCardLabel(loader, loader.getReference(), deck.get(loader));
+					cardLabel.setLocation(j * cardLabel.getWidth(), i * cardLabel.getHeight());
+					if(loader.getReference().get() != null)
+						System.out.println(j + ", " + i + ": " + loader.uri);
+					
+					container.add(cardLabel);
+				}
+			}
+		}
+		container.repaint();
 	}
 	
 	private static AtomicInteger foundClans, searchingThreads;
 	public static void showAndSearchClans(String clan, String player, boolean loadWhenSingle) throws IOException {
 		stopThread = false;
 		var cs = sanitizeForURL(clan);
-		Document doc = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on").get();
+		Document doc = load("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on");
 		foundClans = new AtomicInteger();
 		searchingThreads = new AtomicInteger();
 		
@@ -346,7 +389,6 @@ public class Main {
 		System.out.println(num + " clans found...");
 		
 		evalSearch(clan, player, clanResults, container);
-		System.out.println(container.getComponents().length);
 		if(num == 1 && loadWhenSingle) {
 			while(container.getComponents().length < 1) { } 
 			if(container.getComponent(0) instanceof JButton button) button.doClick();
@@ -360,7 +402,7 @@ public class Main {
 				final int j = i;
 				thread("showandsearch-" + i, () -> {
 					try {
-						var docP = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on&page=" + j).get();
+						var docP = load("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on&page=" + j);
 						var clanResultsP = docP.select("div.card");
 						evalSearch(clan, player, clanResultsP, container);
 						scrollPane.revalidate();
@@ -563,6 +605,14 @@ public class Main {
 		Thread thr = new Thread(r, name);
 		threads.add(thr);
 		return thr;
+	}
+	
+	private static Map<String, Document> docCache = new HashMap<>();
+	public static Document load(String url) throws IOException {
+		if(!docCache.containsKey(url))
+			docCache.put(url, Jsoup.connect(url).get());
+		
+		return docCache.get(url);
 	}
 	
 	public static String sanitizeForURL(String text) {

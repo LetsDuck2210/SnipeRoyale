@@ -1,5 +1,7 @@
 package util;
 
+import static main.Main.load;
+
 import java.awt.Image;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -65,7 +67,7 @@ public class Clan {
 	}
 	
 	public static List<Player> getClanPlayers(String tag) throws IOException {
-		var doc = Jsoup.connect("https://royaleapi.com/clan/" + tag).get();
+		var doc = load("https://royaleapi.com/clan/" + tag);
 		var players = new ArrayList<Player>();
 		
 		var playerElements = doc.select("a.member_link");

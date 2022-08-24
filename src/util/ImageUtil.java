@@ -28,8 +28,10 @@ public class ImageUtil {
 	private boolean syncRequested;
 	private Consumer<Exception> errHandler;
 	private Consumer<Image> imageHandler;
+	public String uri;
 	
 	private ImageUtil(File file) {
+		uri = file.getAbsolutePath();
 		thread = new Thread(() -> {
 			if(fileImages.containsKey(file.getAbsolutePath())) {
 				img = fileImages.get(file.getAbsolutePath());
@@ -52,6 +54,7 @@ public class ImageUtil {
 		thread.start();
 	}
 	private ImageUtil(URL url) {
+		uri = url.getPath();
 		thread = new Thread(() -> {
 			if(urlImages.containsKey(url)) {
 				img = urlImages.get(url);
@@ -136,6 +139,9 @@ public class ImageUtil {
 		this.repaintComponent = component;
 		
 		return this;
+	}
+	public AtomicReference<Image> getReference() {
+		return reference;
 	}
 	
 	public ImageUtil catchErr(Consumer<Exception> errHandler) {
