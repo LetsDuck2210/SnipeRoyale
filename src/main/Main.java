@@ -9,9 +9,9 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,7 +39,7 @@ import util.Player;
 public class Main {
 	private static JFrame frame;
 	private static JPanel root;
-	private static JLabel debugLabel;
+	private static JLabel debugLabel, info;
 	private static boolean exactPlayerSearch, exactClanSearch;
 	private static boolean stopThread;
 	private static List<Thread> threads;
@@ -50,6 +50,8 @@ public class Main {
 	private static String searchedClan;
 	private static String searchedPlayer;
 	private static Clan currentClan;
+	
+	private static final int TIMEOUT = 2 * 60 * 1000;
 
 	public static void debug(String message, Color color) {
 		boolean contains = false;
@@ -291,12 +293,18 @@ public class Main {
 				if(showMainDeck) {
 					try {
 						drawMainDeck(deckContainer, player);
+						swapDecks.setText("\u2694");
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				} else {
 					try {
-						drawBattleDeck(deckContainer, player);
+						if(drawBattleDeck(deckContainer, player) < 0) {
+							deckContainer.removeAll();
+							drawMainDeck(deckContainer, player);
+							swapDecks.setVisible(false);
+						} else
+							swapDecks.setText("🪜");
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -316,7 +324,7 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-	public static void drawMainDeck(JLabel container, Player player) throws IOException {
+	public static int drawMainDeck(JLabel container, Player player) throws IOException {
 		container.removeAll();
 		var deck = player.getMainDeck();
 		var iter = deck.keySet().iterator();
@@ -328,14 +336,14 @@ public class Main {
 				
 				var cardLabel = getCardLabel(loader, loader.getReference(), deck.get(loader));
 				cardLabel.setLocation(j * cardLabel.getWidth(), i * cardLabel.getHeight());
-				System.out.println(j + ", " + i);
 				
 				container.add(cardLabel);
 			}
 		}
 		container.repaint();
+		return 0;
 	}
-	public static void drawBattleDeck(JLabel container, Player player) throws IOException {
+	public static int drawBattleDeck(JLabel container, Player player) throws IOException {
 		container.removeAll();
 		var deck = player.getBattleDeck();
 		var iter = deck.keySet().iterator();
@@ -348,23 +356,26 @@ public class Main {
 					
 					var cardLabel = getCardLabel(loader, loader.getReference(), deck.get(loader));
 					cardLabel.setLocation(j * cardLabel.getWidth(), i * cardLabel.getHeight());
-					if(loader.getReference().get() != null)
-						System.out.println(j + ", " + i + ": " + loader.uri);
 					
 					container.add(cardLabel);
+				} else {
+					return -1;
 				}
 			}
 		}
 		container.repaint();
+		return 0;
 	}
 	
-	private static AtomicInteger foundClans, searchingThreads;
+	private static AtomicInteger foundClans, checkedClans, searchingThreads;
+	private static int searchResults;
 	public static void showAndSearchClans(String clan, String player, boolean loadWhenSingle) throws IOException {
 		stopThread = false;
 		var cs = sanitizeForURL(clan);
 		Document doc = load("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on");
 		foundClans = new AtomicInteger();
 		searchingThreads = new AtomicInteger();
+		checkedClans = new AtomicInteger();
 		
 		root.removeAll();
 		
@@ -377,7 +388,7 @@ public class Main {
 		var clanResults = doc.select("div.card");
 		var amountResults = doc.select("div.ui.segment.attached.top").select("strong").get(0).html();
 		var num = Integer.parseInt(amountResults.substring("Found".length(), amountResults.length() - "clans".length()).trim());
-		JLabel info = new JLabel(num + " clan" + (num != 1 ? "s" : ""));
+		info = new JLabel("0/" + num + " clan" + (num != 1 ? "s" : ""));
 		info.setSize(100, 32);
 		info.setHorizontalAlignment(SwingConstants.RIGHT);
 		info.setLocation(root.getWidth() - info.getWidth() - 4, root.getHeight() - info.getHeight() * 2);
@@ -386,7 +397,7 @@ public class Main {
 		root.add(homeButton);
 		root.repaint();
 		scrollPane.revalidate();
-		System.out.println(num + " clans found...");
+		searchResults = num;
 		
 		evalSearch(clan, player, clanResults, container);
 		if(num == 1 && loadWhenSingle) {
@@ -397,7 +408,7 @@ public class Main {
 		
 		thread("showandsearch-root", () -> {
 			searchingThreads.getAndIncrement();
-			for(int i = 2; i <= Math.floor(num / 60); i++) {
+			for(int i = 2; i <= Math.ceil(num / 60.0); i++) {
 				if(stopThread) return;
 				final int j = i;
 				thread("showandsearch-" + i, () -> {
@@ -413,11 +424,11 @@ public class Main {
 					
 					threads.remove(Thread.currentThread());
 				}).start();
-				try {
-					Thread.sleep(1250);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+//				try {
+//					Thread.sleep(300 * j);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
 			}
 			
 			searchingThreads.getAndIncrement();
@@ -476,6 +487,9 @@ public class Main {
 					else
 						container.setPreferredSize(new Dimension(root.getWidth(), 100 * foundClans.get()));
 					
+					checkedClans.getAndIncrement();
+					info.setText(checkedClans.get() + "/" + searchResults + " clan" + (searchResults != 1 ? "s" : ""));
+					info.repaint();
 					container.repaint();
 					container.revalidate();
 					container.getParent().revalidate();
@@ -508,8 +522,13 @@ public class Main {
 					getHeight() / 2 + 8
 				);
 				
-				var badge = ImageUtil.resize(clan.getBadge(), -1, getHeight());
-				g.drawImage(badge, getWidth() - badge.getWidth(null), 0, null);
+				try {
+					var badge = ImageUtil.resize(clan.getBadge(), -1, getHeight());
+					g.drawImage(badge, getWidth() - badge.getWidth(null), 0, null);
+				} catch(IOException e) {
+					debug("Connect exception: " + e.getMessage(), Color.RED);
+					e.printStackTrace();
+				}
 			}
 		};
 		clanLabel.setSize(500, 100);
@@ -607,10 +626,10 @@ public class Main {
 		return thr;
 	}
 	
-	private static Map<String, Document> docCache = new HashMap<>();
+	private static Map<String, Document> docCache = new ConcurrentHashMap<>();
 	public static Document load(String url) throws IOException {
 		if(!docCache.containsKey(url))
-			docCache.put(url, Jsoup.connect(url).get());
+			docCache.put(url, Jsoup.connect(url).timeout(TIMEOUT).get());
 		
 		return docCache.get(url);
 	}
