@@ -1,5 +1,7 @@
 package util;
 
+import static main.Main.load;
+
 import java.awt.Image;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -13,7 +15,7 @@ import javax.imageio.ImageIO;
 import org.jsoup.Jsoup;
 
 public class Clan {
-	private String name, tag;
+	private String name, tag, html;
 	private Image badge;
 	private List<Player> players;
 	
@@ -25,8 +27,9 @@ public class Clan {
 	public Clan(String clanResult, boolean loadPlayers) throws MalformedURLException, IOException {
 		name = getClanName(clanResult);
 		tag = getClanTag(clanResult);
-		badge = getClanBadge(clanResult);
-		
+		this.html = clanResult;
+//		badge = getClanBadge(clanResult);
+	
 		if(loadPlayers)
 			loadPlayers();
 	}
@@ -42,7 +45,9 @@ public class Clan {
 	public String getTag() {
 		return tag;
 	}
-	public Image getBadge() {
+	public Image getBadge() throws MalformedURLException, IOException {
+		if(badge == null)
+			badge = getClanBadge(html);
 		return badge;
 	}
 	public Player[] getPlayers() {
@@ -65,7 +70,7 @@ public class Clan {
 	}
 	
 	public static List<Player> getClanPlayers(String tag) throws IOException {
-		var doc = Jsoup.connect("https://royaleapi.com/clan/" + tag).get();
+		var doc = load("https://royaleapi.com/clan/" + tag);
 		var players = new ArrayList<Player>();
 		
 		var playerElements = doc.select("a.member_link");
@@ -78,6 +83,7 @@ public class Clan {
 	}
 	
 	public static Image getClanBadge(String clan) throws MalformedURLException, IOException {
+		System.out.println("loading badge...");
 		var badgePrefix = "https://cdn.royaleapi.com/static/img/badge-fs8";
 		int badgeStart = clan.indexOf(badgePrefix);
 		if(badgeStart < 0)

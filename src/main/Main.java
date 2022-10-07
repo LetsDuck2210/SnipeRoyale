@@ -1,13 +1,17 @@
 package main;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -33,17 +37,42 @@ import util.Player;
 public class Main {
 	private static JFrame frame;
 	private static JPanel root;
-	private static JLabel debugLabel;
+	private static JLabel debugLabel, info;
 	private static boolean exactPlayerSearch, exactClanSearch;
-	private static String searchedPlayer;
 	private static boolean stopThread;
 	private static List<Thread> threads;
 	
 	private static JButton homeButton;
+	private static JButton backButton;
 	
+	private static String searchedClan;
+	private static String searchedPlayer;
+	private static Clan currentClan;
+	
+	private static final int TIMEOUT = 2 * 60 * 1000;
+
+	public static void debug(String message, Color color) {
+		boolean contains = false;
+		for(var comp : root.getComponents())
+			if(comp.equals(debugLabel))
+				contains = true;
+		
+		if(!contains)
+			root.add(debugLabel);
+		debugLabel.setForeground(color);
+		debugLabel.setText(message);
+	}
+	
+	public static void main(String[] args) throws AWTException, InterruptedException, IOException, TesseractException {
+//		Thread.sleep(5000);
+		Toolkit.getDefaultToolkit().beep();
+		SwingUtilities.invokeLater(() -> {
+			showFrame();
+		});
+	}
 	public static void setupFrame() {
 		frame = new JFrame("SnipeRoyale");
-		frame.setSize(600, 400);
+		frame.setSize(600, 416);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(3);
 		frame.setResizable(false);
@@ -66,12 +95,38 @@ public class Main {
 			debug("Couldn't read image(assets/Home.png): " + e.getMessage(), Color.RED);
 			e.printStackTrace();
 		});
-		homeButton.setLocation(4, root.getHeight() - buttonSize * 2);
+		homeButton.setLocation(4 + buttonSize, root.getHeight() - buttonSize * 2);
 		homeButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		homeButton.addActionListener(a -> {
 			root.removeAll();
 			showFrame();
 			stopThread = true;
+		});
+		
+		backButton = new JButton();
+		backButton.setSize(buttonSize, buttonSize);
+		ImageUtil.loadFile("assets/Back.png").to(backButton).catchErr(e -> {
+			debug("Couldn't read image(assets/Home.png): " + e.getMessage(), Color.RED);
+			e.printStackTrace();
+		});
+		backButton.setLocation(homeButton.getX() - buttonSize, homeButton.getY());
+		backButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		backButton.addActionListener(a -> {
+			switch(a.getActionCommand()) {
+				case "clans" -> {
+					try {
+						showAndSearchClans(searchedClan, searchedPlayer, false);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						debug("Connect exception: " + e1.getMessage(), Color.RED);
+					}
+					break;
+				}
+				case "players" -> {
+					showPlayers(currentClan, false);
+					break;
+				}
+			}
 		});
 		
 		threads = new ArrayList<>();
@@ -128,7 +183,7 @@ public class Main {
 		);
 		root.add(exactClanSearch);
 		
-		var searchButton = new JButton("search");
+		var searchButton = new JButton("snipe");
 		searchButton.setSize(inSize.width, inSize.height);
 		searchButton.setLocation(
 			root.getWidth() / 2 - searchButton.getWidth() / 2,
@@ -140,8 +195,9 @@ public class Main {
 				Main.exactPlayerSearch = exactPlayerSearch.isSelected();
 				Main.exactClanSearch = exactClanSearch.isSelected();
 				searchedPlayer = playerInput.getText();
+				searchedClan = clanInput.getText();
 				
-				showAndSearchClans(clanInput.getText(), playerInput.getText());
+				showAndSearchClans(searchedClan, searchedPlayer, true);
 			} catch (IOException e) {
 				e.printStackTrace();
 				debug("Connect exception: " + e.getMessage(), Color.RED);
@@ -149,14 +205,16 @@ public class Main {
 		});
 		root.add(searchButton);
 		
+		AutoResize.resize(frame);
+		
 		frame.repaint();
 	}
-	public static void showPlayers(Clan clan) {
+	public static void showPlayers(Clan clan, boolean loadWhenSingle) {
 		root.removeAll();
 		
 		clan.onlyPlayersByName(searchedPlayer, exactPlayerSearch);
 		
-		if(clan.getPlayers().length == 1) {
+		if(clan.getPlayers().length == 1 && loadWhenSingle) {
 			showPlayer(clan, clan.getPlayers()[0]);
 			return;
 		}
@@ -177,21 +235,23 @@ public class Main {
 			Player p = clan.getPlayers()[j];
 			playerContainer.add(getPlayerLabel(p, j + 1, () -> showPlayer(clan, p)));
 		}
+		backButton.setActionCommand("clans");
+		
 		root.add(playerScrollPane);
+		root.add(backButton);
 		root.add(homeButton);
 		playerScrollPane.revalidate();
 	}
+	
+	private static boolean showMainDeck = true;
 	public static void showPlayer(Clan clan, Player player) {
 		root.removeAll();
 		root.repaint();
 		stopThread = true;
+		currentClan = clan;
 		
-		System.out.println("loading deck " + player + "...");
 		
 		try {
-			var doc = Jsoup.connect("https://royaleapi.com/player/" + player.getTag()).get();
-			var cards = doc.select("img.deck_card");
-			var levels = doc.select("h5.cardlevel");
 			JLabel container = new JLabel();
 			container.setSize(root.getSize());
 			container.setBackground(Color.WHITE);
@@ -263,39 +323,123 @@ public class Main {
 					container.add(nameLabel);
 					container.add(trophyLabel);
 					container.repaint();
+			
+			JLabel deckContainer = new JLabel();
+			deckContainer.setLocation(50, 50);
+			deckContainer.setSize(root.getWidth() - 50, root.getHeight() - 120);
+			deckContainer.setBackground(Color.WHITE);
+			deckContainer.setOpaque(true);
+			container.add(deckContainer);
+			
+			drawMainDeck(deckContainer, player);
+			showMainDeck = true;
+			
+			String nameLabelStr = "👤" + player.getName() + "  🛡" + clan.getName();
+			JLabel nameLabel = new JLabel(nameLabelStr);
+			nameLabel.setFont(new Font("sans-serif", Font.BOLD, 16));
+			nameLabel.setSize(root.getWidth(), 40);
+			nameLabel.setLocation(50, 10);
+			
+			JLabel trophyLabel = new JLabel("🏆" + player.getTrophies());
+			trophyLabel.setFont(nameLabel.getFont());
+			trophyLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			trophyLabel.setSize(root.getWidth() - 50, 40);
+			trophyLabel.setLocation(0, 10);
+			
+			JButton swapDecks = new JButton("\u2694");
+			swapDecks.setSize(homeButton.getSize());
+			swapDecks.setLocation(container.getWidth() - swapDecks.getWidth(), container.getHeight() - 2 * swapDecks.getHeight());
+			swapDecks.setFont(new Font("sans-serif", 0, 20));
+			swapDecks.addActionListener(a -> {
+				deckContainer.removeAll();
+				showMainDeck = !showMainDeck;
+				
+				if(showMainDeck) {
+					try {
+						drawMainDeck(deckContainer, player);
+						swapDecks.setText("\u2694");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						if(drawBattleDeck(deckContainer, player) < 0) {
+							deckContainer.removeAll();
+							drawMainDeck(deckContainer, player);
+							swapDecks.setVisible(false);
+						} else
+							swapDecks.setText("🪜");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-			}
+			});
+			
+			backButton.setActionCommand("players");
+			
+			container.add(homeButton);
+			container.add(backButton);
+			container.add(swapDecks);
+			container.add(nameLabel);
+			container.add(trophyLabel);
+			container.repaint();
 		} catch(IOException e) {
 			debug("Connect exception: " + e.getMessage(), Color.RED);
 			e.printStackTrace();
 		}
 	}
-	
-	public static void debug(String message, Color color) {
-		boolean contains = false;
-		for(var comp : root.getComponents())
-			if(comp.equals(debugLabel))
-				contains = true;
+	public static int drawMainDeck(JLabel container, Player player) throws IOException {
+		container.removeAll();
+		var deck = player.getMainDeck();
+		var iter = deck.keySet().iterator();
+		System.out.println("main deck");
 		
-		if(!contains)
-			root.add(debugLabel);
-		debugLabel.setForeground(color);
-		debugLabel.setText(message);
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 4; j++) {
+				var loader = iter.next();
+				
+				var cardLabel = getCardLabel(loader, loader.getReference(), deck.get(loader));
+				cardLabel.setLocation(j * cardLabel.getWidth(), i * cardLabel.getHeight());
+				
+				container.add(cardLabel);
+			}
+		}
+		container.repaint();
+		return 0;
+	}
+	public static int drawBattleDeck(JLabel container, Player player) throws IOException {
+		container.removeAll();
+		var deck = player.getBattleDeck();
+		var iter = deck.keySet().iterator();
+		System.out.println("battle deck");
+		
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 4; j++) {
+				if(iter.hasNext()) {
+					var loader = iter.next();
+					
+					var cardLabel = getCardLabel(loader, loader.getReference(), deck.get(loader));
+					cardLabel.setLocation(j * cardLabel.getWidth(), i * cardLabel.getHeight());
+					
+					container.add(cardLabel);
+				} else {
+					return -1;
+				}
+			}
+		}
+		container.repaint();
+		return 0;
 	}
 	
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			showFrame();
-		});
-	}
-	
-	private static AtomicInteger foundClans, searchingThreads;
-	public static void showAndSearchClans(String clan, String player) throws IOException {
+	private static AtomicInteger foundClans, checkedClans, searchingThreads;
+	private static int searchResults;
+	public static void showAndSearchClans(String clan, String player, boolean loadWhenSingle) throws IOException {
 		stopThread = false;
 		var cs = sanitizeForURL(clan);
-		Document doc = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on").get();
+		Document doc = load("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on");
 		foundClans = new AtomicInteger();
 		searchingThreads = new AtomicInteger();
+		checkedClans = new AtomicInteger();
 		
 		root.removeAll();
 		
@@ -308,7 +452,7 @@ public class Main {
 		var clanResults = doc.select("div.card");
 		var amountResults = doc.select("div.ui.segment.attached.top").select("strong").get(0).html();
 		var num = Integer.parseInt(amountResults.substring("Found".length(), amountResults.length() - "clans".length()).trim());
-		JLabel info = new JLabel(num + " clan" + (num != 1 ? "s" : ""));
+		info = new JLabel("0/" + num + " clan" + (num != 1 ? "s" : ""));
 		info.setSize(100, 32);
 		info.setHorizontalAlignment(SwingConstants.RIGHT);
 		info.setLocation(root.getWidth() - info.getWidth() - 4, root.getHeight() - info.getHeight() * 2);
@@ -317,11 +461,10 @@ public class Main {
 		root.add(homeButton);
 		root.repaint();
 		scrollPane.revalidate();
-		System.out.println(num + " clans found...");
+		searchResults = num;
 		
 		evalSearch(clan, player, clanResults, container);
-		System.out.println(container.getComponents().length);
-		if(num == 1) {
+		if(num == 1 && loadWhenSingle) {
 			while(container.getComponents().length < 1) { } 
 			if(container.getComponent(0) instanceof JButton button) button.doClick();
 		}
@@ -329,12 +472,12 @@ public class Main {
 		
 		thread("showandsearch-root", () -> {
 			searchingThreads.getAndIncrement();
-			for(int i = 2; i <= Math.floor(num / 60); i++) {
+			for(int i = 2; i <= Math.ceil(num / 60.0); i++) {
 				if(stopThread) return;
 				final int j = i;
 				thread("showandsearch-" + i, () -> {
 					try {
-						var docP = Jsoup.connect("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on&page=" + j).get();
+						var docP = load("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on&page=" + j);
 						var clanResultsP = docP.select("div.card");
 						evalSearch(clan, player, clanResultsP, container);
 						scrollPane.revalidate();
@@ -345,23 +488,24 @@ public class Main {
 					
 					threads.remove(Thread.currentThread());
 				}).start();
-				try {
-					Thread.sleep(1250);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+//				try {
+//					Thread.sleep(300 * j);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
 			}
 			
 			searchingThreads.getAndIncrement();
 			threads.remove(Thread.currentThread());
 		}).start();
 		
-		thread("check-one-clan", () -> {
-			while(searchingThreads.get() > 0 && !stopThread) { }
-			if(foundClans.get() == 1 && !stopThread) {
-				if(container.getComponent(0) instanceof JButton button) button.doClick();
-			}
-		}).start();
+		if(loadWhenSingle)
+			thread("check-one-clan", () -> {
+				while(searchingThreads.get() > 0 && !stopThread) { }
+				if(foundClans.get() == 1 && !stopThread) {
+					if(container.getComponent(0) instanceof JButton button) button.doClick();
+				}
+			}).start();
 	}
 	public static void evalSearch(String clan, String player, Elements clans, JLabel container) {
 		if(stopThread) return;
@@ -403,10 +547,13 @@ public class Main {
 						}
 					}
 					if(add)
-						container.add(getClanLabel(clanRes, foundClans.getAndIncrement(), () -> showPlayers(clanRes)));
+						container.add(getClanLabel(clanRes, foundClans.getAndIncrement(), () -> showPlayers(clanRes, true)));
 					else
 						container.setPreferredSize(new Dimension(root.getWidth(), 100 * foundClans.get()));
 					
+					checkedClans.getAndIncrement();
+					info.setText(checkedClans.get() + "/" + searchResults + " clan" + (searchResults != 1 ? "s" : ""));
+					info.repaint();
 					container.repaint();
 					container.revalidate();
 					container.getParent().revalidate();
@@ -439,8 +586,13 @@ public class Main {
 					getHeight() / 2 + 8
 				);
 				
-				var badge = ImageUtil.resize(clan.getBadge(), -1, getHeight());
-				g.drawImage(badge, getWidth() - badge.getWidth(null), 0, null);
+				try {
+					var badge = ImageUtil.resize(clan.getBadge(), -1, getHeight());
+					g.drawImage(badge, getWidth() - badge.getWidth(null), 0, null);
+				} catch(IOException e) {
+					debug("Connect exception: " + e.getMessage(), Color.RED);
+					e.printStackTrace();
+				}
 			}
 		};
 		clanLabel.setSize(500, 100);
@@ -494,6 +646,36 @@ public class Main {
 		return label;
 	}
 	
+	public static JLabel getCardLabel(ImageUtil loader, AtomicReference<Image> imgRef, int level) {
+		JLabel cardLabel = new JLabel() {
+			private static final long serialVersionUID = 8499764229216881906L;
+			
+			@Override
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				
+				g.setFont(new Font("sans-serif", Font.BOLD, 20));
+				if(imgRef.get() != null) {
+					Image img = ImageUtil.resize(
+						imgRef.get(),
+						500 / 4,
+						-1
+					);
+					g.drawImage(img, 0, 0, null);
+					setSize(img.getWidth(null), img.getHeight(null));
+				}
+				g.setColor(Color.CYAN);
+				var lvlStr = "Lvl " + level;
+				g.drawString(lvlStr, getWidth() / 2 - (lvlStr.length() * getFont().getSize()) / 2, getHeight() - getFont().getSize());
+			}
+		};
+		cardLabel.setSize(125, 150);
+		loader.repaint(cardLabel);
+		cardLabel.repaint();
+		
+		return cardLabel;
+	}
+	
 	/**
 	 * will create and register a new thread 
 	 */
@@ -506,6 +688,14 @@ public class Main {
 		Thread thr = new Thread(r, name);
 		threads.add(thr);
 		return thr;
+	}
+	
+	private static Map<String, Document> docCache = new ConcurrentHashMap<>();
+	public static Document load(String url) throws IOException {
+		if(!docCache.containsKey(url))
+			docCache.put(url, Jsoup.connect(url).timeout(TIMEOUT).get());
+		
+		return docCache.get(url);
 	}
 	
 	public static String sanitizeForURL(String text) {

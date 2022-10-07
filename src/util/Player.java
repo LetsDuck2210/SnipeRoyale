@@ -1,12 +1,19 @@
 package util;
 
-import java.io.IOException;
+import static main.Main.load;
 
-import org.jsoup.Jsoup;
+import java.awt.Image;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+
+import org.jsoup.select.Elements;
 
 public class Player {
 	private String name, tag;
 	private int trophies;
+	private Map<ImageUtil, Integer> mainDeck, battleDeck;
 	
 	/**
 	 * will parse name and tag from html result
@@ -17,6 +24,8 @@ public class Player {
 	public Player(String playerResult) throws IOException {
 		tag = getPlayerTag(playerResult);
 		name = getPlayerName(playerResult);
+		mainDeck = new HashMap<>();
+		battleDeck = new HashMap<>();
 		trophies = -1;
 	}
 	public String getName() {
@@ -29,6 +38,72 @@ public class Player {
 		if(trophies == -1)
 			trophies = getPlayerTrophies(tag);
 		return trophies;
+	}
+	public Map<ImageUtil, Integer> getMainDeck() throws IOException {
+		if(!mainDeck.isEmpty())
+			return mainDeck;
+		Elements cardsMainDeck, levelsMainDeck;
+		var doc = load("https://royaleapi.com/player/" + getTag() + "");
+		cardsMainDeck = doc.select("img.deck_card");
+		levelsMainDeck = doc.select("div.card-level");
+
+		for(int i = 0; i < cardsMainDeck.size(); i++) {
+			var card = cardsMainDeck.get(i).toString();
+			var level = levelsMainDeck.get(i).toString();
+			
+			var urlPrefix = "src=\""; // src="
+			var urlStart = card.indexOf(urlPrefix) + urlPrefix.length();
+			var urlEnd = card.indexOf('"', urlStart);
+			
+			var levelEnd = level.lastIndexOf('<');
+			var levelStart = level.lastIndexOf('>', levelEnd);
+			var levelI = Integer.parseInt(level.substring(levelStart + 1, levelEnd - 1).trim());
+			
+			var imgURL = card.substring(urlStart, urlEnd);
+			var loader = ImageUtil
+							.loadURL(imgURL)
+							.to(new AtomicReference<Image>());
+			
+			mainDeck.put(loader, levelI);
+		}
+		
+		return mainDeck;
+	}
+	public Map<ImageUtil, Integer> getBattleDeck() throws IOException {
+		if(!battleDeck.isEmpty())
+			return battleDeck;
+		
+		Elements cardsBattleDeck, levelsBattleDeck;
+		var doc = load("https://royaleapi.com/player/" + getTag() + "/battles");
+		var deck0 = doc.select("div.ui.padded.grid");
+		if(deck0.size() <= 0) {
+			System.out.println("Battle deck not found");
+			return battleDeck;
+		}
+		cardsBattleDeck = deck0.get(0).select("img.deck_card");
+		levelsBattleDeck = deck0.get(0).select("div.card-level");
+		
+		for(int i = 0; i < cardsBattleDeck.size(); i++) {
+			var card = cardsBattleDeck.get(i).toString();
+			var level = levelsBattleDeck.get(i).toString();
+			
+			var urlPrefix = "src=\""; // src="
+			var urlStart = card.indexOf(urlPrefix) + urlPrefix.length();
+			var urlEnd = card.indexOf('"', urlStart);
+			
+			var levelEnd = level.lastIndexOf('<');
+			var levelStart = level.lastIndexOf('>', levelEnd);
+			var levelI = Integer.parseInt(level.substring(levelStart + 1, levelEnd - 1).trim());
+			
+			var imgURL = card.substring(urlStart, urlEnd);
+			var loader = ImageUtil
+							.loadURL(imgURL)
+							.to(new AtomicReference<Image>());
+			
+			battleDeck.put(loader, levelI);
+		}
+		
+		return battleDeck;
 	}
 	
 	public static String getPlayerTag(String player) {
@@ -46,7 +121,7 @@ public class Player {
 		return nameQoute.substring(1).trim();
 	}
 	public static int getPlayerTrophies(String tag) throws IOException {
-		var elements = Jsoup.connect("https://royaleapi.com/player/" + tag).get();
+		var elements = load("https://royaleapi.com/player/" + tag);
 		var profileContainer = elements.select("div.player__profile_header_container");
 		var trophyItem = profileContainer.select("div.item").get(0).toString();
 		
