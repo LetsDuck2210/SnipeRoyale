@@ -26,7 +26,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import util.AutoResize;
 import util.Clan;
 import util.ImageUtil;
 import util.Player;
@@ -150,8 +149,6 @@ public class Main {
 		});
 		root.add(searchButton);
 		
-		AutoResize.resize(frame);
-		
 		frame.repaint();
 	}
 	public static void showPlayers(Clan clan) {
@@ -249,13 +246,13 @@ public class Main {
 					cardLabel.repaint();
 					cardLabel.setLocation(j * cardLabel.getWidth() + 50, i * cardLabel.getHeight() + 50);
 					
-					String nameLabelStr = "👤" + player.getName() + "  🛡" + clan.getName();
+					String nameLabelStr = "ðŸ‘¤" + player.getName() + "  ðŸ›¡" + clan.getName();
 					JLabel nameLabel = new JLabel(nameLabelStr);
 					nameLabel.setFont(new Font("sans-serif", Font.BOLD, 16));
 					nameLabel.setSize(root.getWidth(), 40);
 					nameLabel.setLocation(50, 10);
 					
-					JLabel trophyLabel = new JLabel("🏆" + player.getTrophies());
+					JLabel trophyLabel = new JLabel("ðŸ�†" + player.getTrophies());
 					trophyLabel.setFont(nameLabel.getFont());
 					trophyLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 					trophyLabel.setSize(root.getWidth() - 50, 40);
