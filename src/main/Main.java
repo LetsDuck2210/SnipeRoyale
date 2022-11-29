@@ -30,7 +30,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import net.sourceforge.tess4j.TesseractException;
 import util.AutoResize;
 import util.Clan;
 import util.ImageUtil;
@@ -65,7 +64,7 @@ public class Main {
 		debugLabel.setText(message);
 	}
 	
-	public static void main(String[] args) throws AWTException, InterruptedException, IOException, TesseractException {
+	public static void main(String[] args) throws AWTException, InterruptedException, IOException {
 //		Thread.sleep(5000);
 		Toolkit.getDefaultToolkit().beep();
 		SwingUtilities.invokeLater(() -> {
@@ -270,13 +269,13 @@ public class Main {
 			drawMainDeck(deckContainer, player);
 			showMainDeck = true;
 			
-			String nameLabelStr = "👤" + player.getName() + "  🛡" + clan.getName();
+			String nameLabelStr = "ðŸ‘¤" + player.getName() + "  ðŸ›¡" + clan.getName();
 			JLabel nameLabel = new JLabel(nameLabelStr);
 			nameLabel.setFont(new Font("sans-serif", Font.BOLD, 16));
 			nameLabel.setSize(root.getWidth(), 40);
 			nameLabel.setLocation(50, 10);
 			
-			JLabel trophyLabel = new JLabel("🏆" + player.getTrophies());
+			JLabel trophyLabel = new JLabel("ðŸ�†" + player.getTrophies());
 			trophyLabel.setFont(nameLabel.getFont());
 			trophyLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			trophyLabel.setSize(root.getWidth() - 50, 40);
@@ -304,7 +303,7 @@ public class Main {
 							drawMainDeck(deckContainer, player);
 							swapDecks.setVisible(false);
 						} else
-							swapDecks.setText("🪜");
+							swapDecks.setText("ðŸªœ");
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
