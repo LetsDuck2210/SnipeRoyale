@@ -65,7 +65,6 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws AWTException, InterruptedException, IOException {
-//		Thread.sleep(5000);
 		Toolkit.getDefaultToolkit().beep();
 		SwingUtilities.invokeLater(() -> {
 			showFrame();
@@ -145,23 +144,11 @@ public class Main {
 		root.add(titleImage);
 		
 		var inSize = new Dimension(200, 40);
-		var clanInput = new JTextField();
-		clanInput.setSize(inSize);
-		clanInput.setLocation(
-			root.getWidth() / 2 - inSize.width / 2,
-			root.getHeight() / 2 - inSize.height - 16
-		);
-		var clanInputLabel = new JLabel("Clan: ", SwingConstants.RIGHT);
-		clanInputLabel.setSize(clanInput.getX(), inSize.height);
-		clanInputLabel.setLocation(0, clanInput.getY());
-		root.add(clanInput);
-		root.add(clanInputLabel);
-		
 		var playerInput = new JTextField();
 		playerInput.setSize(inSize);
 		playerInput.setLocation(
 			root.getWidth() / 2 - inSize.width / 2,
-			root.getHeight() / 2 - 16
+			root.getHeight() / 2 - inSize.height - 16
 		);
 		var playerInputLabel = new JLabel("Player: ", SwingConstants.RIGHT);
 		playerInputLabel.setSize(playerInput.getX(), inSize.height);
@@ -169,14 +156,27 @@ public class Main {
 		root.add(playerInputLabel);
 		root.add(playerInput);
 		
-		var exactPlayerSearch = new JCheckBox("exact match");
+		var clanInput = new JTextField();
+		clanInput.setSize(inSize);
+		clanInput.setLocation(
+			root.getWidth() / 2 - inSize.width / 2,
+			root.getHeight() / 2 - 16
+		);
+		var clanInputLabel = new JLabel("Clan: ", SwingConstants.RIGHT);
+		clanInputLabel.setSize(clanInput.getX(), inSize.height);
+		clanInputLabel.setLocation(0, clanInput.getY());
+		root.add(clanInput);
+		root.add(clanInputLabel);
+		
+		
+		var exactPlayerSearch = new JCheckBox("exact p");
 		exactPlayerSearch.setSize((int) Math.round(inSize.width / 1.5), inSize.height);
 		exactPlayerSearch.setLocation(
 			playerInput.getX() + playerInput.getWidth(),
 			playerInput.getY()
 		);
 		root.add(exactPlayerSearch);
-		var exactClanSearch = new JCheckBox("exact match");
+		var exactClanSearch = new JCheckBox("exact c");
 		exactClanSearch.setSize((int) Math.round(inSize.width / 1.5), inSize.height);
 		exactClanSearch.setLocation(
 			clanInput.getX() + clanInput.getWidth(),
@@ -423,11 +423,12 @@ public class Main {
 					
 					threads.remove(Thread.currentThread());
 				}).start();
-//				try {
-//					Thread.sleep(300 * j);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
+				
+				try {
+					Thread.sleep(150 * j);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 			
 			searchingThreads.getAndIncrement();
@@ -463,6 +464,7 @@ public class Main {
 							clanRes.loadPlayers();
 						} else {
 							container.setPreferredSize(new Dimension(root.getWidth(), 100 * foundClans.get()));
+							checkedClans.getAndIncrement();
 							return;
 						}
 					;
