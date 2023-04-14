@@ -5,12 +5,9 @@ import static main.Main.load;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-
-import javax.imageio.ImageIO;
 
 import org.jsoup.Jsoup;
 
@@ -45,7 +42,7 @@ public class Clan {
 	public String getTag() {
 		return tag;
 	}
-	public Image getBadge() throws MalformedURLException, IOException {
+	public Image getBadge() throws IOException {
 		if(badge == null)
 			badge = getClanBadge(html);
 		return badge;
@@ -82,14 +79,19 @@ public class Clan {
 		return players;
 	}
 	
-	public static Image getClanBadge(String clan) throws MalformedURLException, IOException {
+	public static Image getClanBadge(String clan) throws IOException {
 		System.out.println("loading badge...");
 		var badgePrefix = "https://cdn.royaleapi.com/static/img/badge-fs8";
 		int badgeStart = clan.indexOf(badgePrefix);
 		if(badgeStart < 0)
 			throw new IllegalArgumentException("invalid clan result");
 		String imageURL = clan.substring(badgeStart, clan.indexOf('"', badgeStart));
-		return ImageIO.read(new URL(imageURL));
+		try {
+			return ImageUtil.loadURL(imageURL).sync();
+		} catch (MalformedURLException | InterruptedException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	public static String getClanName(String clan) {
 		var doc = Jsoup.parse(clan);

@@ -3,4 +3,5 @@ module sniperoyale {
 	exports main;
 
 	requires org.jsoup;
+	requires java.desktop;
 }
