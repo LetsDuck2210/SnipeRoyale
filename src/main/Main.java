@@ -213,10 +213,10 @@ public class Main {
 	public static void showPlayers(Clan clan, boolean loadWhenSingle) {
 		root.removeAll();
 		
-		clan.onlyPlayersByName(searchedPlayer, exactPlayerSearch);
+		clan.filterPlayers(searchedPlayer, exactPlayerSearch);
 		
-		if(clan.getPlayers().length == 1 && loadWhenSingle) {
-			showPlayer(clan, clan.getPlayers()[0]);
+		if(clan.getPlayers().size() == 1 && loadWhenSingle) {
+			showPlayer(clan, clan.getPlayers().get(0));
 			return;
 		}
 		
@@ -225,15 +225,15 @@ public class Main {
 		clanName.setFont(new Font("sans-serif", Font.BOLD, 20));
 		
 		var playerContainer = new JLabel();
-		playerContainer.setPreferredSize(new Dimension(root.getWidth(), 80 * clan.getPlayers().length + clanName.getHeight() + 28 * 2));
+		playerContainer.setPreferredSize(new Dimension(root.getWidth(), 80 * clan.getPlayers().size() + clanName.getHeight() + 28 * 2));
 		
 		playerContainer.add(clanName);
 		var playerScrollPane = new JScrollPane(playerContainer);
 		playerScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		playerScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		playerScrollPane.setSize(root.getWidth(), root.getHeight() - homeButton.getHeight() * 2);
-		for(int j = 0; j < clan.getPlayers().length; j++) {
-			Player p = clan.getPlayers()[j];
+		for(int j = 0; j < clan.getPlayers().size(); j++) {
+			Player p = clan.getPlayers().get(j);
 			playerContainer.add(getPlayerLabel(p, j + 1, () -> showPlayer(clan, p)));
 		}
 		backButton.setActionCommand("clans");
@@ -584,12 +584,7 @@ public class Main {
 					getHeight() / 2 - getFont().getSize() / 2,
 					getHeight() / 2 + 8
 				);
-				String trophyStr = "-1";
-				try {
-					trophyStr = "" + p.getTrophies();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				String trophyStr = "" + p.getTrophies().orElse(-1);
 				g.drawString(
 					trophyStr,
 					getWidth() - getFont().getSize() * trophyStr.length() - 10,

@@ -1,0 +1,325 @@
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7250104b-9123-4392-aa73-c93dad7130e6[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7250104b-9123-4392-aa73-c93dad7130e6[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7250104b-9123-4392-aa73-c93dad7130e6[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7250104b-9123-4392-aa73-c93dad7130e6[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/player?clan=90YCLJRJ&player=UYQ89Q8L[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7250104b-9123-4392-aa73-c93dad7130e6[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: */*[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7250104b-9123-4392-aa73-c93dad7130e6[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: image/webp,image/avif,video/*;q=0.8,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7250104b-9123-4392-aa73-c93dad7130e6[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:08 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Content-Type: application/x-www-form-urlencoded[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Origin: http://192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Content-Length: 22[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7250104b-9123-4392-aa73-c93dad7130e6[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: searching for \0x2523\0x2528k...
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: searching threads running
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: */*[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clans[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clans[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:21 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: */*[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: */*[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clans[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clans[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: searching jo in Clan@#(k)inderriegel(90YCLJRJ)
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: found player in Clan@#(k)inderriegel(90YCLJRJ)
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:22 CEST 2023: Clan@#(k)inderriegel(90YCLJRJ) checked
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: */*[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: */*[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clans[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clans[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:23 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:29 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:29 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:29 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:29 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:29 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:29 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:29 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clans[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:29 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:29 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:31 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:31 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:31 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:31 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:31 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:31 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:31 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:31 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/player?clan=90YCLJRJ&player=PPLLGL0GG[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:33 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:40 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:40 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:40 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:40 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:40 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:40 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:40 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:40 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:40 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/player?clan=90YCLJRJ&player=UYQ89Q8L[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:13:41 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:57 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:57 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:57 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:57 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:57 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:57 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:57 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:57 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:57 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:58 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:58 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:58 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:58 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:58 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:58 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:58 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/player?clan=90YCLJRJ&player=2RRU0URQ2[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:14:58 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/player?clan=90YCLJRJ&player=2RRU0URQ2[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:15:20 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/player?clan=90YCLJRJ&player=2RRU0URQ2[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:22 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/player?clan=90YCLJRJ&player=2RRU0URQ2[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:16:37 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clan?clan=90YCLJRJ[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/css,*/*;q=0.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/player?clan=90YCLJRJ&player=UYQ89Q8L[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:19:25 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Content-Type: application/x-www-form-urlencoded[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Origin: http://192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Upgrade-Insecure-Requests: 1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Content-Length: 22[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=7ac3c7af-9b7b-4549-b035-6d134a641e8d[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: searching for \0x2523\0x2528k...
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: searching threads running
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: searching jo in Clan@#(k)inderriegel(90YCLJRJ)
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: found player in Clan@#(k)inderriegel(90YCLJRJ)
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: Clan@#(k)inderriegel(90YCLJRJ) checked
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: */*[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=81e4c8b2-9e5a-4bd6-93d0-f738b265a373[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clans[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:04 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: */*[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: */*[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=81e4c8b2-9e5a-4bd6-93d0-f738b265a373[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=81e4c8b2-9e5a-4bd6-93d0-f738b265a373[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clans[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/clans[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:05 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: */*[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=81e4c8b2-9e5a-4bd6-93d0-f738b265a373[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Host: 192.168.178.148[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept: image/webp,image/avif,video/*;q=0.8,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Connection: keep-alive[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Cookie: uuid=81e4c8b2-9e5a-4bd6-93d0-f738b265a373[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Language: de-DE,de;q=0.9[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Referer: http://192.168.178.148/[0m
+[38;5;69m[DEBUG] [0mFri Apr 14 18:20:06 CEST 2023: [48;5;40m[38;5;215m[192.168.178.132] Accept-Encoding: gzip, deflate[0m

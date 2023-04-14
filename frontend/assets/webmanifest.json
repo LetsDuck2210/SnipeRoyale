@@ -1,0 +1,12 @@
+{
+	"display": "standalone",
+	"short_name": "SnipeRoyale",
+	"icons": [
+		{
+			"src": "images/favicon-196.ico",
+			"sizes": "192x192",
+			"type": "image/x-icon",
+			"purpose": "maskable any"
+		}
+	]
+}

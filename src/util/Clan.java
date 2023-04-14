@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 import org.jsoup.Jsoup;
 
 public class Clan {
-	private String name, tag, html;
+	private String name, tag, html, badgeURL;
 	private Image badge;
 	private List<Player> players;
 	
@@ -47,23 +47,29 @@ public class Clan {
 			badge = getClanBadge(html);
 		return badge;
 	}
-	public Player[] getPlayers() {
-		return players.toArray(new Player[0]);
+	public Optional<String> getBadgeURL() {
+		if(badgeURL == null)
+			try {
+				badgeURL = getClanBadgeURL(html);
+			} catch (IOException e) {
+				return Optional.empty();
+			}
+		return Optional.of(badgeURL);
+	}
+	public List<Player> getPlayers() {
+		return List.copyOf(players);
 	}
 	public void loadPlayers() throws IOException {
 		players = getClanPlayers(tag);
 	}
-	public void onlyPlayersByName(String name, boolean matchExact) {
-		players.removeIf(new Predicate<Player>() {
-
-			@Override
-			public boolean test(Player p) {
-				if(matchExact)
-					return !p.getName().equals(name);
-				else
-					return !p.getName().toLowerCase().contains(name.toLowerCase());
-			}
-		});
+	public List<Player> filterPlayers(String name, boolean matchExact) {
+		players.removeIf(p -> 
+			matchExact ? 
+					!p.getName().equals(name) 
+				  : !p.getName().toLowerCase().contains(name.toLowerCase())
+		);
+		
+		return players;
 	}
 	
 	public static List<Player> getClanPlayers(String tag) throws IOException {
@@ -79,13 +85,12 @@ public class Clan {
 		return players;
 	}
 	
-	public static Image getClanBadge(String clan) throws IOException {
-		System.out.println("loading badge...");
+	public static Image getClanBadge(String clanHtml) throws IOException {
 		var badgePrefix = "https://cdn.royaleapi.com/static/img/badge-fs8";
-		int badgeStart = clan.indexOf(badgePrefix);
+		int badgeStart = clanHtml.indexOf(badgePrefix);
 		if(badgeStart < 0)
 			throw new IllegalArgumentException("invalid clan result");
-		String imageURL = clan.substring(badgeStart, clan.indexOf('"', badgeStart));
+		String imageURL = clanHtml.substring(badgeStart, clanHtml.indexOf('"', badgeStart));
 		try {
 			return ImageUtil.loadURL(imageURL).sync();
 		} catch (MalformedURLException | InterruptedException e) {
@@ -93,8 +98,17 @@ public class Clan {
 		}
 		return null;
 	}
-	public static String getClanName(String clan) {
-		var doc = Jsoup.parse(clan);
+	public static String getClanBadgeURL(String clanHtml) throws IOException {
+		var badgePrefix = "https://cdn.royaleapi.com/static/img/badge-fs8";
+		int badgeStart = clanHtml.indexOf(badgePrefix);
+		if(badgeStart < 0)
+			throw new IllegalArgumentException("invalid clan result");
+		String imageURL = clanHtml.substring(badgeStart, clanHtml.indexOf('"', badgeStart));
+		
+		return imageURL;
+	}
+	public static String getClanName(String clanHtml) {
+		var doc = Jsoup.parse(clanHtml);
 		
 		var nameLink = doc.select("a.header").get(0).toString();
 		var nameStart = nameLink.indexOf('>') + 1;

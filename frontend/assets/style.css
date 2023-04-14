@@ -1,0 +1,112 @@
+body {
+	background-color: #35394a;
+	font-size: 2rem;
+	padding: 0 10% 0 10%;
+}
+
+/*  /  */
+
+.background {
+	height: 20rem;
+	background-image: url('SnipeRoyaleTitle.jpg');
+	background-repeat: no-repeat;
+	background-size: 100% auto;
+	text-align: center;
+	background-color: #4e79f2;
+	border-radius: .4rem;
+}
+.main {
+	margin-top: 25%;
+}
+.input {
+	background-color: #8a95b5;
+	border-style: double;
+	border-radius: .3rem;
+	border-color: #35394a;
+	border-width: .3rem;
+	padding: .5rem;
+	margin: .2rem;
+}
+
+/*  /clans  */
+.badge {
+	position: relative;
+}
+.wrap {
+	padding: 0;
+}
+.vcenter {
+	position: relative;
+	top: 3.8rem;
+}
+
+/*  /clan  */
+.link {
+	text-decoration: none;
+	color: black;
+}
+.list {
+	background-color: #8a95b5;
+	border-radius: 1rem;
+	padding: 1rem 0 1rem 0;
+}
+.label {
+	padding: 1rem 0rem 1rem 0rem;
+}
+.grid-3 {
+	display: grid;
+	grid-template-columns: 2fr 2fr 1fr;
+}
+
+/*  /player  */
+.banner-top {
+	background-color: #8a95b5;
+	padding: 1rem;
+	vertical-align: center;
+	border-radius: 1rem 1rem 0 0;
+}
+.heading {
+	position: relative;
+	font-size: 2.2rem;
+	font-weight: bold;
+	margin: 0 2rem 0 2rem;
+}
+.right {
+	float: right;
+}
+.grid {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(4, auto);
+	grid-template-rows: repeat(2, auto);
+	align-items: start;
+	background-color: #6e7791;
+	border-radius: 0 0 1rem 1rem;
+}
+.card {
+	position: relative;
+}
+.card-img {
+	object-fit: contain;
+	max-width: 100%;
+	max-height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+}
+.overlay {
+	position: absolute;
+	top: 66%;
+	bottom: auto;
+	left: 20%;
+	right: auto;
+	
+	font-weight: bold;
+	font-size: 1.4rem;
+	
+	color: #0314fc;
+	filter: drop-shadow(.12rem .1rem .1rem orange);
+}
