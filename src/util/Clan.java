@@ -1,7 +1,5 @@
 package util;
 
-import static main.Main.load;
-
 import java.awt.Image;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -15,18 +13,20 @@ public class Clan {
 	private String name, tag, html, badgeURL;
 	private Image badge;
 	private List<Player> players;
+	private UrlCache cache;
 	
 	/** 
 	 * will parse name, tag and badge from html result
 	 * 
 	 *  @param clanResult	the html div of a clan result
 	 */
-	public Clan(String clanResult, boolean loadPlayers) throws MalformedURLException, IOException {
+	public Clan(String clanResult, boolean loadPlayers, UrlCache cache) throws MalformedURLException, IOException {
 		name = getClanName(clanResult);
 		tag = getClanTag(clanResult);
 		this.html = clanResult;
+		this.cache = cache;
 //		badge = getClanBadge(clanResult);
-	
+
 		if(loadPlayers)
 			loadPlayers();
 	}
@@ -60,7 +60,7 @@ public class Clan {
 		return List.copyOf(players);
 	}
 	public void loadPlayers() throws IOException {
-		players = getClanPlayers(tag);
+		players = getClanPlayers(tag, cache);
 	}
 	public List<Player> filterPlayers(String name, boolean matchExact) {
 		players.removeIf(p -> 
@@ -72,13 +72,14 @@ public class Clan {
 		return players;
 	}
 	
-	public static List<Player> getClanPlayers(String tag) throws IOException {
-		var doc = load("https://royaleapi.com/clan/" + tag);
+	public static List<Player> getClanPlayers(String tag, UrlCache cache) throws IOException {
+		var doc = cache.load("https://royaleapi.com/clan/" + tag);
 		var players = new ArrayList<Player>();
+		if(doc.isEmpty()) return players;
 		
-		var playerElements = doc.select("a.member_link");
+		var playerElements = doc.get().select("a.member_link");
 		for(int i = 0; i < playerElements.size(); i++) {
-			var player = new Player(playerElements.get(i).toString());
+			var player = new Player(playerElements.get(i).toString(), cache);
 			players.add(player);
 		}
 		

@@ -11,12 +11,12 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import server.HttpStatus;
-import server.Server;
-import server.Session;
+import httpserver.server.HttpStatus;
+import httpserver.server.Server;
+import httpserver.server.Session;
+import httpserver.util.DefaultLogger;
+import httpserver.util.FileUtil;
 import util.Clan;
-import util.DefaultLogger;
-import util.FileUtil;
 import util.Player;
 
 public class SnipeServer {
@@ -71,7 +71,6 @@ public class SnipeServer {
 			return;
 		}
 		
-		getLogger().log(Level.INFO, "Requested " + resource);
 		FileUtil.sendFile(FileUtil.sanitize("frontend" + resource), session);
 	}
 	
@@ -157,7 +156,6 @@ public class SnipeServer {
 	
 	// 	expected:	GET /clan?clan=<CLAN_TAG>
 	public static void clan(Session session) throws IOException {
-		
 		var sniper = getSniper(session);
 		if(sniper.isEmpty()) return;
 		
@@ -168,6 +166,8 @@ public class SnipeServer {
 			session.sendHeader("Location", "/clans?refresh=all");
 			return;
 		}
+		
+		sniper.get().stopThread();
 		
 		var clan = sniper.get().getClans(false).get(tag);
 		if(clan == null) {

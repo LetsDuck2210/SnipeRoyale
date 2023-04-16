@@ -9,23 +9,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import util.Clan;
+import util.UrlCache;
 
 public class Sniper {
-	private static final int TIMEOUT = 30 * 1000;
 	private static Map<UUID, Sniper> snipers = new HashMap<>();
 	private UUID uuid;
 	private String player, clan;
 	private Map<String, Clan> clans;
 	private List<Clan> change;
+	private UrlCache cache;
 	
 	public Sniper(String player, String clan) {
 		uuid = UUID.randomUUID();
@@ -35,6 +34,7 @@ public class Sniper {
 		clans = new LinkedHashMap<>();
 		change = new LinkedList<>();
 		threads = new LinkedList<>();
+		cache = new UrlCache();
 	}
 	
 	public UUID uuid() {
@@ -64,7 +64,9 @@ public class Sniper {
 		SnipeServer.getLogger().log(Level.INFO, "starting search for " + uuid + "...");
 		Document doc;
 		try {
-			doc = load("https://royaleapi.com/clans/search?name=" + clan + "&exactNameMatch=on");
+			var tmp = cache.load("https://royaleapi.com/clans/search?name=" + clan + "&exactNameMatch=on");
+			if(tmp.isEmpty()) return 0;
+			doc = tmp.get();
 		} catch (IOException e) {
 			SnipeServer.getLogger().log(Level.ERROR, "I/O Exception: " + e.getMessage());
 			return 0;
@@ -96,13 +98,13 @@ public class Sniper {
 					final int j = i;
 					thread("search-" + i, () -> {
 						try {
-							var docP = load("https://royaleapi.com/clans/search?name=" + clan + "&exactNameMatch=on&page=" + j);
+							var docP = cache.load("https://royaleapi.com/clans/search?name=" + clan + "&exactNameMatch=on&page=" + j);
+							if(docP.isEmpty()) return;
 							SnipeServer.getLogger().log(Level.DEBUG, "page " + j + "   OK");
-							var clanResultsP = docP.select("div.card");
+							var clanResultsP = docP.get().select("div.card");
 							checkClans(clan, player, clanResultsP, handler);
 						} catch (IOException e) {
-							SnipeServer.getLogger().log(Level.WARNING, "Connect exception: " + e.getMessage());
-							e.printStackTrace();
+							SnipeServer.getLogger().log(Level.WARNING, "I/O Exception: " + e.getMessage());
 						}
 						
 						threads.remove(Thread.currentThread());
@@ -138,7 +140,7 @@ public class Sniper {
 				searchingThreads.getAndIncrement();
 				
 				try {
-					Clan clanRes = new Clan(clans.get(j).toString(), true);
+					Clan clanRes = new Clan(clans.get(j).toString(), true, cache);
 					boolean add = false;
 					
 					SnipeServer.getLogger().log(Level.DEBUG, "searching " + player + " in " + clanRes);
@@ -186,15 +188,42 @@ public class Sniper {
 	
 	public void stopThread() {
 		stopThread = true;
+		cache.stop();
 	}
 	
-	private static Map<String, Document> docCache = new ConcurrentHashMap<>();
-	public static Document load(String url) throws IOException {
-		if(!docCache.containsKey(url))
-			docCache.put(url, Jsoup.connect(url).timeout(TIMEOUT).get());
-		
-		return docCache.get(url);
-	}
+//	private static Map<String, Document> docCache = new ConcurrentHashMap<>();
+	/**
+	 * loads the given url either directly or from cache.
+	 * 
+	 * If it is not cached, <code> load </code> will try to fetch it for as long as the host returns a status code of 429 (Too many Requests)
+	 *  
+	 * @throws IOException if the host returns a different error than 429
+	 */
+//	public Document load(String url) throws IOException {
+//		if(!docCache.containsKey(url)) {
+//			Document doc = null;
+//			do {
+//				if(stopThread) return null;
+//				try {
+//					doc = Jsoup.connect(url).timeout(TIMEOUT).get();
+//					break;
+//				} catch(HttpStatusException e) {
+//					if(e.getStatusCode() != 429)
+//						throw e;
+//				}
+//				
+//				try {
+//					Thread.sleep(RETRY);
+//				} catch(InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			} while(doc == null);
+//			
+//			docCache.put(url, doc);
+//		}
+//		
+//		return docCache.get(url);
+//	}
 	
 	public static String sanitizeForURL(String text) {
 		String res = "";

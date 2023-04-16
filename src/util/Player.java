@@ -1,7 +1,5 @@
 package util;
 
-import static main.Main.load;
-
 import java.awt.Image;
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,6 +14,7 @@ public class Player {
 	private int trophies;
 	private Map<ImageUtil, Integer> mainDeck, battleDeck;
 	private Map<String, Integer> mainDeckURLs, battleDeckURLs;
+	private UrlCache cache;
 	
 	/**
 	 * will parse name and tag from html result
@@ -23,7 +22,7 @@ public class Player {
 	 *  @param playerResult	the html link(a) of a player result
 	 * @throws IOException 
 	 */
-	public Player(String playerResult) throws IOException {
+	public Player(String playerResult, UrlCache cache) throws IOException {
 		tag = getPlayerTag(playerResult);
 		name = getPlayerName(playerResult);
 		mainDeck = new HashMap<>();
@@ -31,6 +30,7 @@ public class Player {
 		mainDeckURLs = new HashMap<>();
 		battleDeckURLs = new HashMap<>();
 		trophies = -1;
+		this.cache = cache;
 	}
 	public String getName() {
 		return name;
@@ -41,7 +41,7 @@ public class Player {
 	public Optional<Integer> getTrophies() {
 		if(trophies == -1)
 			try {
-				trophies = getPlayerTrophies(tag);
+				trophies = getPlayerTrophies(tag, cache);
 			} catch (IOException e) {
 				return Optional.empty();
 			}
@@ -55,9 +55,10 @@ public class Player {
 			return mainDeckURLs;
 		try {
 			Elements cardsMainDeck, levelsMainDeck;
-			var doc = load("https://royaleapi.com/player/" + getTag() + "");
-			cardsMainDeck = doc.select("img.deck_card");
-			levelsMainDeck = doc.select("div.card-level");
+			var doc = cache.load("https://royaleapi.com/player/" + getTag() + "");
+			if(doc.isEmpty()) return Map.of();
+			cardsMainDeck = doc.get().select("img.deck_card");
+			levelsMainDeck = doc.get().select("div.card-level");
 	
 			for(int i = 0; i < cardsMainDeck.size(); i++) {
 				var card = cardsMainDeck.get(i).toString();
@@ -100,8 +101,9 @@ public class Player {
 		
 		try {
 			Elements cardsBattleDeck, levelsBattleDeck;
-			var doc = load("https://royaleapi.com/player/" + getTag() + "/battles");
-			var deck0 = doc.select("div.ui.padded.grid");
+			var doc = cache.load("https://royaleapi.com/player/" + getTag() + "/battles");
+			if(doc.isEmpty()) return Map.of();
+			var deck0 = doc.get().select("div.ui.padded.grid");
 			if(deck0.size() <= 0) {
 				System.out.println("Battle deck not found");
 				return battleDeckURLs;
@@ -159,9 +161,10 @@ public class Player {
 		
 		return nameQoute.substring(1).trim();
 	}
-	public static int getPlayerTrophies(String tag) throws IOException {
-		var elements = load("https://royaleapi.com/player/" + tag);
-		var profileContainer = elements.select("div.player__profile_header_container");
+	public static int getPlayerTrophies(String tag, UrlCache cache) throws IOException {
+		var elements = cache.load("https://royaleapi.com/player/" + tag);
+		if(elements.isEmpty()) return -1;
+		var profileContainer = elements.get().select("div.player__profile_header_container");
 		var trophyItem = profileContainer.select("div.item").get(0).toString();
 		
 		var start = trophyItem.indexOf('>');

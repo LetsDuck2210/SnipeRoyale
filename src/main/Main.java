@@ -10,8 +10,6 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -26,14 +24,13 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import util.AutoResize;
 import util.Clan;
 import util.ImageUtil;
 import util.Player;
+import util.UrlCache;
 
 public class Main {
 	private static JFrame frame;
@@ -50,7 +47,7 @@ public class Main {
 	private static String searchedPlayer;
 	private static Clan currentClan;
 	
-	private static final int TIMEOUT = 30 * 1000;
+	private static UrlCache cache;
 
 	public static void debug(String message, Color color) {
 		boolean contains = false;
@@ -66,6 +63,7 @@ public class Main {
 	
 	public static void main(String[] args) throws AWTException, InterruptedException, IOException {
 		Toolkit.getDefaultToolkit().beep();
+		cache = new UrlCache();
 		SwingUtilities.invokeLater(() -> {
 			showFrame();
 		});
@@ -372,7 +370,8 @@ public class Main {
 		stopThread = false;
 		var cs = sanitizeForURL(clan);
 		System.out.println("starting search...");
-		Document doc = load("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on");
+		var doc = cache.load("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on");
+		if(doc.isEmpty()) return;
 		System.out.println("page 0   OK");
 		foundClans = new AtomicInteger();
 		searchingThreads = new AtomicInteger();
@@ -386,8 +385,8 @@ public class Main {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setSize(root.getWidth(), root.getHeight() - 64);
 		
-		var clanResults = doc.select("div.card");
-		var arElem = doc.select("div.ui.segment.attached.top").select("strong");
+		var clanResults = doc.get().select("div.card");
+		var arElem = doc.get().select("div.ui.segment.attached.top").select("strong");
 		if(arElem.size() == 0) {
 			System.out.println("invalid search query");
 			showFrame();
@@ -425,9 +424,10 @@ public class Main {
 				final int j = i;
 				thread("showandsearch-" + i, () -> {
 					try {
-						var docP = load("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on&page=" + j);
+						var docP = cache.load("https://royaleapi.com/clans/search?name=" + cs + "&exactNameMatch=on&page=" + j);
+						if(docP.isEmpty()) return;
 						System.out.println("page " + j + "   OK");
-						var clanResultsP = docP.select("div.card");
+						var clanResultsP = docP.get().select("div.card");
 						evalSearch(clan, player, clanResultsP, container);
 						scrollPane.revalidate();
 					} catch (IOException e) {
@@ -474,7 +474,7 @@ public class Main {
 				searchingThreads.getAndIncrement();
 				
 				try {
-					Clan clanRes = new Clan(clans.get(j).toString(), !exactClanSearch);
+					Clan clanRes = new Clan(clans.get(j).toString(), !exactClanSearch, cache);
 					if(exactClanSearch) 
 						if(clanRes.getName().equalsIgnoreCase(clan)) {
 							System.out.println("Loading players for " + clanRes);
@@ -644,14 +644,6 @@ public class Main {
 		Thread thr = new Thread(r, name);
 		threads.add(thr);
 		return thr;
-	}
-	
-	private static Map<String, Document> docCache = new ConcurrentHashMap<>();
-	public static Document load(String url) throws IOException {
-		if(!docCache.containsKey(url))
-			docCache.put(url, Jsoup.connect(url).timeout(TIMEOUT).get());
-		
-		return docCache.get(url);
 	}
 	
 	public static String sanitizeForURL(String text) {
