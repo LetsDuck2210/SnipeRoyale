@@ -475,7 +475,7 @@ public class Main {
 				
 				try {
 					Clan clanRes = new Clan(clans.get(j).toString(), !exactClanSearch, cache);
-					if(exactClanSearch) 
+					if(exactClanSearch)
 						if(clanRes.getName().equalsIgnoreCase(clan)) {
 							System.out.println("Loading players for " + clanRes);
 							clanRes.loadPlayers();

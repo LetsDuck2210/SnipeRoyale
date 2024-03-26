@@ -22,7 +22,7 @@ function refresh() {
 	let checked = parseInt(document.getElementById('checked-clans').innerHTML);
 	let total = parseInt(document.getElementById('total-clans').innerHTML)
 	if(checked < total)
-    	setTimeout(refresh, 1000);
+    	setTimeout(refresh, 3000);
 }
 function refresh_checked() {
     let xhttp = new XMLHttpRequest();

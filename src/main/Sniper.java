@@ -71,7 +71,7 @@ public class Sniper {
 			SnipeServer.getLogger().log(Level.ERROR, "I/O Exception: " + e.getMessage());
 			return 0;
 		}
-		System.out.println("page 0   OK");
+		SnipeServer.getLogger().log(Level.DEBUG, "page 0   OK");
 		foundClans = new AtomicInteger();
 		searchingThreads = new AtomicInteger();
 		checkedClans = new AtomicInteger();
@@ -106,8 +106,6 @@ public class Sniper {
 						} catch (IOException e) {
 							SnipeServer.getLogger().log(Level.WARNING, "I/O Exception: " + e.getMessage());
 						}
-						
-						threads.remove(Thread.currentThread());
 					}).start();
 					
 					try {
@@ -118,7 +116,6 @@ public class Sniper {
 				}
 				
 				searchingThreads.getAndDecrement();
-				threads.remove(Thread.currentThread());
 			}).start();
 		}).start();
 		
@@ -191,40 +188,6 @@ public class Sniper {
 		cache.stop();
 	}
 	
-//	private static Map<String, Document> docCache = new ConcurrentHashMap<>();
-	/**
-	 * loads the given url either directly or from cache.
-	 * 
-	 * If it is not cached, <code> load </code> will try to fetch it for as long as the host returns a status code of 429 (Too many Requests)
-	 *  
-	 * @throws IOException if the host returns a different error than 429
-	 */
-//	public Document load(String url) throws IOException {
-//		if(!docCache.containsKey(url)) {
-//			Document doc = null;
-//			do {
-//				if(stopThread) return null;
-//				try {
-//					doc = Jsoup.connect(url).timeout(TIMEOUT).get();
-//					break;
-//				} catch(HttpStatusException e) {
-//					if(e.getStatusCode() != 429)
-//						throw e;
-//				}
-//				
-//				try {
-//					Thread.sleep(RETRY);
-//				} catch(InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//			} while(doc == null);
-//			
-//			docCache.put(url, doc);
-//		}
-//		
-//		return docCache.get(url);
-//	}
-	
 	public static String sanitizeForURL(String text) {
 		String res = "";
 		
@@ -240,13 +203,34 @@ public class Sniper {
 	}
 
 	private static List<Thread> threads;
+	private static final int MAX_CLAN_THREADS = 10;
+	private static int clanCheckingThreads = 0;
 	public static Thread thread(Runnable r) {
-		Thread thr = new Thread(r);
+		Thread thr = new Thread(() -> {
+			r.run();
+			threads.remove(Thread.currentThread());
+		});
 		threads.add(thr);
 		return thr;
 	}
 	public static Thread thread(String name, Runnable r) {
-		Thread thr = new Thread(r, name);
+		if(name.startsWith("check-clan-")) {
+			try {
+				while(clanCheckingThreads >= MAX_CLAN_THREADS)
+					Thread.sleep(10);
+			} catch(InterruptedException e) {
+				SnipeServer.getLogger().log(Level.ERROR, "Interrupted: " + e.getMessage());
+				return null;
+			}
+			clanCheckingThreads++;
+		}
+		Thread thr = new Thread(() -> {
+			r.run();
+			threads.remove(Thread.currentThread());
+			
+			if(name.startsWith("check-clan-"))
+				clanCheckingThreads--;
+		}, name);
 		threads.add(thr);
 		return thr;
 	}
