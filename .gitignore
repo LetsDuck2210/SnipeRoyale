@@ -1,3 +1,5 @@
 /bin/
 /target/
 *.log
+dependency-reduced-pom.xml
+.DS_Store
